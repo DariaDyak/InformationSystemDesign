@@ -71,22 +71,51 @@ class Teacher:
             raise ValueError("Некорректный стаж работы")
         self.__experience_years = years
 
+    def get_first_name(self):
+        return self.__first_name
+
+    def get_last_name(self):
+        return self.__last_name
+
+    def get_email(self):
+        return self.__email
+
+    def get_academic_degree(self):
+        return self.__academic_degree
+
+    def get_administrative_position(self):
+        return self.__administrative_position
+
+    def get_experience_years(self):
+        return self.__experience_years
+
     def __str__(self):
-        return (f"Преподаватель: {self.__first_name} {self.__last_name}, "
-                f"Email: {self.__email}, Степень: {self.__academic_degree}, "
-                f"Должность: {self.__administrative_position}, Стаж: {self.__experience_years} лет")
+        return (f"Преподаватель: {self.get_first_name()} {self.get_last_name()}, "
+                f"Email: {self.get_email()}, Степень: {self.get_academic_degree()}, "
+                f"Должность: {self.get_administrative_position()}, Стаж: {self.get_experience_years()} лет")
 
-    # Краткое представление объекта
     def __repr__(self):
-        return f"Преподаватель('{self.__first_name}', '{self.__last_name}', '{self.__email}')"
+        return f"Преподаватель('{self.get_first_name()}', '{self.get_last_name()}', '{self.get_email()}')"
 
-    # Сравнение объектов
     def __eq__(self, other):
         if not isinstance(other, Teacher):
             return NotImplemented
-        return (self.__first_name == other.__first_name and
-                self.__last_name == other.__last_name and
-                self.__email == other.__email and
-                self.__academic_degree == other.__academic_degree and
-                self.__administrative_position == other.__administrative_position and
-                self.__experience_years == other.__experience_years)
+        return (self.get_first_name() == other.get_first_name() and
+                self.get_last_name() == other.get_last_name() and
+                self.get_email() == other.get_email() and
+                self.get_academic_degree() == other.get_academic_degree() and
+                self.get_administrative_position() == other.get_administrative_position() and
+                self.get_experience_years() == other.get_experience_years())
+
+class ShortTeacherInfo(Teacher):
+    def __init__(self, first_name, last_name, email, academic_degree, administrative_position, experience_years, inn, ogrn):
+        super().__init__(first_name, last_name, email, academic_degree, administrative_position, experience_years)
+        self.inn = inn
+        self.ogrn = ogrn
+
+    def __str__(self):
+        return (f"Преподаватель: {self.get_last_name()} {self.get_first_name()[0]}. "
+                f"ИНН: {self.inn}, ОГРН: {self.ogrn}")
+
+    def __repr__(self):
+        return (f"Краткая информация: {self.get_last_name()} {self.get_first_name()[0]}, ИНН={self.inn}, ОГРН={self.ogrn}")
