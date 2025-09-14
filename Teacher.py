@@ -76,16 +76,17 @@ class Teacher:
                 f"Email: {self.__email}, Степень: {self.__academic_degree}, "
                 f"Должность: {self.__administrative_position}, Стаж: {self.__experience_years} лет")
 
-# Примеры инициализации
-t1 = Teacher("Ivan", "Ivanov", "ivan@mail.com", "PhD", "Professor", 10)
+    # Краткое представление объекта
+    def __repr__(self):
+        return f"Преподаватель('{self.__first_name}', '{self.__last_name}', '{self.__email}')"
 
-t2 = Teacher.from_string("Ivan,Ivanov,ivan@mail.com,PhD,Professor,10")
-
-t3 = Teacher.from_json({
-    "first_name": "Ivan",
-    "last_name": "Ivanov",
-    "email": "ivan@mail.com",
-    "academic_degree": "PhD",
-    "administrative_position": "Professor",
-    "experience_years": 10
-})
+    # Сравнение объектов
+    def __eq__(self, other):
+        if not isinstance(other, Teacher):
+            return NotImplemented
+        return (self.__first_name == other.__first_name and
+                self.__last_name == other.__last_name and
+                self.__email == other.__email and
+                self.__academic_degree == other.__academic_degree and
+                self.__administrative_position == other.__administrative_position and
+                self.__experience_years == other.__experience_years)
