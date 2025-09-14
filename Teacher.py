@@ -2,20 +2,6 @@ import re
 
 class Teacher:
     def __init__(self, first_name: str, last_name: str, email: str, academic_degree: str, administrative_position: str, experience_years: int):
-
-        if not self.validate_non_empty_string(first_name):
-            raise ValueError("Некорректное имя")
-        if not self.validate_non_empty_string(last_name):
-            raise ValueError("Некорректная фамилия")
-        if not self.validate_email(email):
-            raise ValueError("Некорректный email")
-        if not self.validate_non_empty_string(academic_degree):
-            raise ValueError("Некорректная ученая степень")
-        if not self.validate_non_empty_string(administrative_position):
-            raise ValueError("Некорректная должность")
-        if not self.validate_experience_years(experience_years):
-            raise ValueError("Некорректный стаж работы")
-
         self.__first_name = first_name
         self.__last_name = last_name
         self.__email = email
@@ -37,6 +23,12 @@ class Teacher:
     def validate_experience_years(years: int) -> bool:
         return isinstance(years, int) and years >= 0
 
+    # Универсальный метод для валидации
+    def __validate_and_set(self, attr_name: str, value, validator, error_message: str):
+        if not validator(value):
+            raise ValueError(error_message)
+        setattr(self, attr_name, value)
+
     # getters (чтение значений)
     def get_first_name(self):
         return self.__first_name
@@ -56,36 +48,24 @@ class Teacher:
     def get_experience_years(self):
         return self.__experience_years
 
-    # setters с валидацией
+    # setters с универсальным методом
     def set_first_name(self, first_name):
-        if not self.validate_non_empty_string(first_name):
-            raise ValueError("Некорректное имя")
-        self.__first_name = first_name
+        self.__validate_and_set('_Teacher__first_name', first_name, self.validate_non_empty_string, "Некорректное имя")
 
     def set_last_name(self, last_name):
-        if not self.validate_non_empty_string(last_name):
-            raise ValueError("Некорректная фамилия")
-        self.__last_name = last_name
+        self.__validate_and_set('_Teacher__last_name', last_name, self.validate_non_empty_string, "Некорректная фамилия")
 
     def set_email(self, email):
-        if not self.validate_email(email):
-            raise ValueError("Некорректный email")
-        self.__email = email
+        self.__validate_and_set('_Teacher__email', email, self.validate_email, "Некорректный email")
 
     def set_academic_degree(self, degree):
-        if not self.validate_non_empty_string(degree):
-            raise ValueError("Некорректная ученая степень")
-        self.__academic_degree = degree
+        self.__validate_and_set('_Teacher__academic_degree', degree, self.validate_non_empty_string, "Некорректная ученая степень")
 
     def set_administrative_position(self, position):
-        if not self.validate_non_empty_string(position):
-            raise ValueError("Некорректная должность")
-        self.__administrative_position = position
+        self.__validate_and_set('_Teacher__administrative_position', position, self.validate_non_empty_string, "Некорректная должность")
 
     def set_experience_years(self, years):
-        if not self.validate_experience_years(years):
-            raise ValueError("Некорректный стаж работы")
-        self.__experience_years = years
+        self.__validate_and_set('_Teacher__experience_years', years, self.validate_experience_years, "Некорректный стаж работы")
 
     def __str__(self):
         return (f"Преподаватель: {self.__first_name} {self.__last_name}, "
