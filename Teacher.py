@@ -1,32 +1,53 @@
 import re
 
 class Teacher:
-    def __init__(self, first_name, last_name, email, academic_degree, administrative_position, experience_years):
-        self.set_first_name(first_name)
-        self.set_last_name(last_name)
-        self.set_email(email)
-        self.set_academic_degree(academic_degree)
-        self.set_administrative_position(administrative_position)
-        self.set_experience_years(experience_years)
+    def __init__(self, first_name=None, last_name=None, email=None, academic_degree=None,
+                 administrative_position=None, experience_years=None, data_str=None, json_data=None):
 
-    @classmethod
-    def from_string(cls, data_str: str):
-        parts = [p.strip() for p in data_str.split(',')]
-        if len(parts) != 6:
-            raise ValueError("Строка должна содержать 6 значений")
-        first_name, last_name, email, academic_degree, administrative_position, experience_years = parts
-        return cls(first_name, last_name, email, academic_degree, administrative_position, int(experience_years))
+        if json_data is not None:
+            try:
+                first_name = json_data['first_name']
+                last_name = json_data['last_name']
+                email = json_data['email']
+                academic_degree = json_data['academic_degree']
+                administrative_position = json_data['administrative_position']
+                experience_years = json_data['experience_years']
+            except KeyError as e:
+                raise ValueError(f"В json_data отсутствует ключ: {e}")
 
-    @classmethod
-    def from_json(cls, json_data: dict):
-        return cls(
-            json_data['first_name'],
-            json_data['last_name'],
-            json_data['email'],
-            json_data['academic_degree'],
-            json_data['administrative_position'],
-            json_data['experience_years']
-        )
+        elif data_str is not None:
+            parts = [p.strip() for p in data_str.split(',')]
+            if len(parts) != 6:
+                raise ValueError("Строка должна содержать 6 значений")
+            first_name, last_name, email, academic_degree, administrative_position, experience_years = parts
+            try:
+                experience_years = int(experience_years)
+            except ValueError:
+                raise ValueError("Стаж работы должен быть целым числом")
+
+        if not all(
+                [first_name, last_name, email, academic_degree, administrative_position]) or experience_years is None:
+            raise ValueError("Не все обязательные параметры заданы")
+
+        if not self.validate_non_empty_string(first_name):
+            raise ValueError("Некорректное имя")
+        if not self.validate_non_empty_string(last_name):
+            raise ValueError("Некорректная фамилия")
+        if not self.validate_email(email):
+            raise ValueError("Некорректный email")
+        if not self.validate_non_empty_string(academic_degree):
+            raise ValueError("Некорректная ученая степень")
+        if not self.validate_non_empty_string(administrative_position):
+            raise ValueError("Некорректная должность")
+        if not self.validate_experience_years(experience_years):
+            raise ValueError("Некорректный стаж работы")
+
+        self.__first_name = first_name
+        self.__last_name = last_name
+        self.__email = email
+        self.__academic_degree = academic_degree
+        self.__administrative_position = administrative_position
+        self.__experience_years = experience_years
 
     @staticmethod
     def validate_email(email: str) -> bool:
@@ -119,3 +140,15 @@ class ShortTeacherInfo(Teacher):
 
     def __repr__(self):
         return (f"Краткая информация: {self.get_last_name()} {self.get_first_name()[0]}, ИНН={self.inn}, ОГРН={self.ogrn}")
+
+t1 = Teacher("Иван", "Иванов", "ivan@example.com", "Кандидат наук", "Заведующий кафедрой", 10)
+t2 = Teacher(data_str="Иван, Иванов, ivan@example.com, Кандидат наук, Заведующий кафедрой, 10")
+t3 = Teacher(json_data={
+    "first_name": "Иван",
+    "last_name": "Иванов",
+    "email": "ivan@example.com",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Заведующий кафедрой",
+    "experience_years": 10
+})
+
