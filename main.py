@@ -1,7 +1,9 @@
+import BaseTeacherRepository
 from TeacherRepJson import TeacherRepJson
 from TeacherRepYaml import TeacherRepYaml
 from TeacherRepDB import TeacherRepDB
 from DatabaseManager import DatabaseManager
+from TeacherDBAdapter import TeacherDBAdapter
 
 def print_separator(title):
     print(f"\n{title}")
@@ -134,7 +136,6 @@ def demo_format(teacher_manager, format_name):
 
     # 6. Сортировка элементов (метод e)
     print_separator("6. Сортировка элементов (sort_by_field)")
-    print("  Сортировка по фамилии:")
     teacher_manager.sort_by_field('last_name')
     sorted_teachers = teacher_manager.read_all()
     display_teachers(sorted_teachers, "Преподаватели после сортировки по фамилии")
@@ -341,6 +342,57 @@ def demo_database_format():
     finally:
         db_connection.disconnect()'''
 
+def demo_adapter_format():
+    """Демонстрация работы с адаптером для базы данных"""
+    print_separator("ДЕМОНСТРАЦИЯ РАБОТЫ С АДАПТЕРОМ БАЗЫ ДАННЫХ")
+
+    try:
+        adapter = TeacherDBAdapter("dummy_path")
+
+        print("Адаптер успешно создан")
+        print(f"Тип адаптера: {type(adapter).__name__}")
+
+        from BaseTeacherRepository import BaseTeacherRepository
+        is_correct_type = isinstance(adapter, BaseTeacherRepository)
+        print(f"Адаптер является экземпляром BaseTeacherRepository: {is_correct_type}")
+
+        if hasattr(adapter, 'clear_table_completely'):
+            print("Адаптер имеет специфические методы БД")
+
+        return demo_format(adapter, "ADAPTER")
+
+    except Exception as e:
+        print(f"Ошибка при работе с адаптером: {e}")
+        return None
+
+def demo_adapter_vs_direct():
+    """Сравнительная демонстрация адаптера и прямого доступа к БД"""
+    print_separator("СРАВНИТЕЛЬНАЯ ДЕМОНСТРАЦИЯ: АДАПТЕР vs ПРЯМОЙ ДОСТУП")
+
+    try:
+        # Создаем оба экземпляра'
+        direct_db = TeacherRepDB()
+        adapter_db = TeacherDBAdapter("dummy_path")
+
+        print("1. Сравнение количества преподавателей:")
+        direct_count = direct_db.get_count()
+        adapter_count = adapter_db.get_count()
+        print(f"   Прямой доступ: {direct_count} преподавателей")
+        print(f"   Через адаптер: {adapter_count} преподавателей")
+        print(f"   Результаты совпадают: {direct_count == adapter_count}")
+
+        print("\n2. Сравнение чтения данных:")
+        direct_teachers = direct_db.read_all()
+        adapter_teachers = adapter_db.read_all()
+        print(f"   Прямой доступ: {len(direct_teachers)} записей")
+        print(f"   Через адаптер: {len(adapter_teachers)} записей")
+        print(f"   Данные идентичны: {direct_teachers == adapter_teachers}")
+
+        return adapter_db
+
+    except Exception as e:
+        print(f"Ошибка при сравнительной демонстрации: {e}")
+        return None
 
 def main():
     # Демонстрация работы с JSON
@@ -349,6 +401,12 @@ def main():
     yaml_manager = demo_format(TeacherRepYaml("teachers.yaml"), "YAML")
     # Демонстрация работы с базой данных PostgreSQL
     db_manager = demo_database_format()
+    # Демонстрация работы через адаптер
+    managers = {}
+    adapter_manager = demo_adapter_format()
+    managers['adapter'] = adapter_manager
+    comparison_manager = demo_adapter_vs_direct()
+    managers['comparison'] = comparison_manager
 
 if __name__ == "__main__":
     main()
