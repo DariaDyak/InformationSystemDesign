@@ -1,5 +1,7 @@
 from TeacherRepJson import TeacherRepJson
 from TeacherRepYaml import TeacherRepYaml
+from TeacherRepDB import TeacherRepDB
+from DBConnection import DBConnection
 
 def print_separator(title):
     print(f"\n{title}")
@@ -101,7 +103,10 @@ def demo_format(teacher_manager, format_name):
     print("  Добавление новых преподавателей:")
     for teacher_data in new_teachers:
         new_id = teacher_manager.add_teacher(*teacher_data)
-        print(f"  Добавлен преподаватель с ID {new_id}: {teacher_data[1]} {teacher_data[0]}")
+        if new_id != -1:
+            print(f"Добавлен преподаватель с ID {new_id}: {teacher_data[1]} {teacher_data[0]}")
+        else:
+            print(f"Ошибка при добавлении: {teacher_data[1]} {teacher_data[0]}")
 
     # 4. Получение объекта по ID (метод c)
     print_separator("4. Получение объекта по ID (get_by_id)")
@@ -295,13 +300,40 @@ def demo_format(teacher_manager, format_name):
 
     return teacher_manager'''
 
+def demo_database_format():
+    """Демонстрация работы с базой данных PostgreSQL"""
+    print_separator("ДЕМОНСТРАЦИЯ РАБОТЫ С БАЗОЙ ДАННЫХ")
+
+    db_connection = DBConnection(
+        dbname="postgres",
+        user="postgres",
+        password="password",
+        host="localhost",
+        port="5432"
+    )
+
+    if not db_connection.connect():
+        print("Не удалось подключиться к базе данных")
+        return None
+
+    try:
+        teacher_manager = TeacherRepDB(db_connection)
+        return demo_format(teacher_manager, "DATABASE")
+
+    except Exception as e:
+        print(f"Ошибка при работе с базой данных: {e}")
+        return None
+    finally:
+        db_connection.disconnect()
+
+
 def main():
     # Демонстрация работы с JSON
-    # json_manager = demo_json_format()
     json_manager = demo_format(TeacherRepJson("teachers.json"), "JSON")
     # Демонстрация работы с YAML
-    # yaml_manager = demo_yaml_format()
     yaml_manager = demo_format(TeacherRepYaml("teachers.yaml"), "YAML")
+    # Демонстрация работы с базой данных PostgreSQL
+    db_manager = demo_database_format()
 
 if __name__ == "__main__":
     main()

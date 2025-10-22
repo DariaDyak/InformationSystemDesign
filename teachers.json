@@ -1,5 +1,23 @@
 [
   {
+    "id_teacher": 2,
+    "first_name": "Мария",
+    "last_name": "Алегрова",
+    "email": "alegr_mar@yandex.ru",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Старший преподаватель",
+    "experience_years": 20
+  },
+  {
+    "id_teacher": 11,
+    "first_name": "Галина",
+    "last_name": "Борисова",
+    "email": "borisova@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Декан",
+    "experience_years": 26
+  },
+  {
     "id_teacher": 1,
     "first_name": "Ирина",
     "last_name": "Валерьева",
@@ -7,42 +25,6 @@
     "academic_degree": "Доктор наук",
     "administrative_position": "Зав кафедрой",
     "experience_years": 10
-  },
-  {
-    "id_teacher": 2,
-    "first_name": "Мария",
-    "last_name": "Алегрова",
-    "email": "alegrova_m@yandex.ru",
-    "academic_degree": "Кандидат наук",
-    "administrative_position": "Доцент",
-    "experience_years": 16
-  },
-  {
-    "id_teacher": 3,
-    "first_name": "Александр",
-    "last_name": "Смирнов",
-    "email": "smirnov@university.edu",
-    "academic_degree": "Доктор наук",
-    "administrative_position": "Декан",
-    "experience_years": 22
-  },
-  {
-    "id_teacher": 4,
-    "first_name": "Мария",
-    "last_name": "Кузнецова",
-    "email": "kuznetsova@university.edu",
-    "academic_degree": "Кандидат наук",
-    "administrative_position": "Доцент",
-    "experience_years": 14
-  },
-  {
-    "id_teacher": 5,
-    "first_name": "Дмитрий",
-    "last_name": "Попов",
-    "email": "popov@university.edu",
-    "academic_degree": "Доктор наук",
-    "administrative_position": "Зав кафедрой",
-    "experience_years": 18
   },
   {
     "id_teacher": 6,
@@ -54,22 +36,22 @@
     "experience_years": 9
   },
   {
-    "id_teacher": 7,
-    "first_name": "Сергей",
-    "last_name": "Петров",
-    "email": "petrov@university.edu",
+    "id_teacher": 12,
+    "first_name": "Виталий",
+    "last_name": "Киселев",
+    "email": "kiselev@university.edu",
     "academic_degree": "Доктор наук",
     "administrative_position": "Профессор",
-    "experience_years": 25
+    "experience_years": 20
   },
   {
-    "id_teacher": 8,
-    "first_name": "Ольга",
-    "last_name": "Соколова",
-    "email": "sokolova@university.edu",
+    "id_teacher": 4,
+    "first_name": "Мария",
+    "last_name": "Кузнецова",
+    "email": "kuznetsova@university.edu",
     "academic_degree": "Кандидат наук",
     "administrative_position": "Доцент",
-    "experience_years": 12
+    "experience_years": 14
   },
   {
     "id_teacher": 9,
@@ -81,6 +63,15 @@
     "experience_years": 20
   },
   {
+    "id_teacher": 13,
+    "first_name": "Лариса",
+    "last_name": "Михайлова",
+    "email": "mikhailova@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Доцент",
+    "experience_years": 12
+  },
+  {
     "id_teacher": 10,
     "first_name": "Наталья",
     "last_name": "Новикова",
@@ -88,5 +79,41 @@
     "academic_degree": "Кандидат наук",
     "administrative_position": "Старший преподаватель",
     "experience_years": 8
+  },
+  {
+    "id_teacher": 7,
+    "first_name": "Сергей",
+    "last_name": "Петров",
+    "email": "petrov@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Профессор",
+    "experience_years": 25
+  },
+  {
+    "id_teacher": 5,
+    "first_name": "Дмитрий",
+    "last_name": "Попов",
+    "email": "popov@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Зав кафедрой",
+    "experience_years": 18
+  },
+  {
+    "id_teacher": 8,
+    "first_name": "Ольга",
+    "last_name": "Соколова",
+    "email": "sokolova@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Доцент",
+    "experience_years": 12
+  },
+  {
+    "id_teacher": 14,
+    "first_name": "Никита",
+    "last_name": "Титов",
+    "email": "titov@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Ассистент",
+    "experience_years": 3
   }
 ]
