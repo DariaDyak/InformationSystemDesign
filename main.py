@@ -70,10 +70,13 @@ def demo_interactive_pagination(teacher_manager, format_name):
         else:
             print("  Неизвестная команда")
 
-def demo_json_format():
-    """Демонстрация работы с JSON форматом"""
-    print_separator("ДЕМОНСТРАЦИЯ РАБОТЫ С JSON ФАЙЛОМ")
-    teacher_manager = TeacherRepJson("teachers.json")
+    # def demo_json_format():
+    # """Демонстрация работы с JSON форматом"""
+
+def demo_format(teacher_manager, format_name):
+    """Общая демонстрация для любого формата"""
+    # print_separator("ДЕМОНСТРАЦИЯ РАБОТЫ С JSON ФАЙЛОМ")
+    # teacher_manager = TeacherRepJson("teachers.json")
 
     # 1. Получение количества элементов (метод i)
     print_separator("1. Получение количества элементов (get_count)")
@@ -121,7 +124,8 @@ def demo_json_format():
     short_list = teacher_manager.get_k_n_short_list(k, n)
     display_short_teachers(short_list, f"Короткий список (страница {n}, по {k} элементов)")
 
-    demo_interactive_pagination(teacher_manager, "JSON")
+    # demo_interactive_pagination(teacher_manager, "JSON")
+    demo_interactive_pagination(teacher_manager, format_name)
 
     # 6. Сортировка элементов (метод e)
     print_separator("6. Сортировка элементов (sort_by_field)")
@@ -180,7 +184,7 @@ def demo_json_format():
 
     return teacher_manager
 
-def demo_yaml_format():
+'''def demo_yaml_format():
     """Демонстрация работы с YAML форматом"""
     print_separator("ДЕМОНСТРАЦИЯ РАБОТЫ С YAML ФАЙЛОМ")
     teacher_manager = TeacherRepYaml("teachers.yaml")
@@ -289,15 +293,15 @@ def demo_yaml_format():
     final_count = teacher_manager.get_count()
     print(f"\n  Итоговое количество преподавателей: {final_count}")
 
-    return teacher_manager
-
+    return teacher_manager'''
 
 def main():
     # Демонстрация работы с JSON
-    json_manager = demo_json_format()
-
+    # json_manager = demo_json_format()
+    json_manager = demo_format(TeacherRepJson("teachers.json"), "JSON")
     # Демонстрация работы с YAML
-    yaml_manager = demo_yaml_format()
+    # yaml_manager = demo_yaml_format()
+    yaml_manager = demo_format(TeacherRepYaml("teachers.yaml"), "YAML")
 
 if __name__ == "__main__":
     main()
