@@ -13,6 +13,62 @@
   id_teacher: 11
   last_name: Борисова
 - academic_degree: Доктор наук
+  administrative_position: Декан
+  email: borisova@university.edu
+  experience_years: 26
+  first_name: Галина
+  id_teacher: 15
+  last_name: Борисова
+- academic_degree: Доктор наук
+  administrative_position: Декан
+  email: borisova@university.edu
+  experience_years: 26
+  first_name: Галина
+  id_teacher: 19
+  last_name: Борисова
+- academic_degree: Доктор наук
+  administrative_position: Декан
+  email: borisova@university.edu
+  experience_years: 26
+  first_name: Галина
+  id_teacher: 23
+  last_name: Борисова
+- academic_degree: Доктор наук
+  administrative_position: Декан
+  email: borisova@university.edu
+  experience_years: 26
+  first_name: Галина
+  id_teacher: 27
+  last_name: Борисова
+- academic_degree: Доктор наук
+  administrative_position: Декан
+  email: borisova@university.edu
+  experience_years: 26
+  first_name: Галина
+  id_teacher: 31
+  last_name: Борисова
+- academic_degree: Доктор наук
+  administrative_position: Декан
+  email: borisova@university.edu
+  experience_years: 26
+  first_name: Галина
+  id_teacher: 35
+  last_name: Борисова
+- academic_degree: Доктор наук
+  administrative_position: Декан
+  email: borisova@university.edu
+  experience_years: 26
+  first_name: Галина
+  id_teacher: 39
+  last_name: Борисова
+- academic_degree: Доктор наук
+  administrative_position: Декан
+  email: borisova@university.edu
+  experience_years: 26
+  first_name: Галина
+  id_teacher: 43
+  last_name: Борисова
+- academic_degree: Доктор наук
   administrative_position: Зав кафедрой
   email: irina@example.com
   experience_years: 10
@@ -32,6 +88,62 @@
   experience_years: 20
   first_name: Виталий
   id_teacher: 12
+  last_name: Киселев
+- academic_degree: Доктор наук
+  administrative_position: Профессор
+  email: kiselev@university.edu
+  experience_years: 20
+  first_name: Виталий
+  id_teacher: 16
+  last_name: Киселев
+- academic_degree: Доктор наук
+  administrative_position: Профессор
+  email: kiselev@university.edu
+  experience_years: 20
+  first_name: Виталий
+  id_teacher: 20
+  last_name: Киселев
+- academic_degree: Доктор наук
+  administrative_position: Профессор
+  email: kiselev@university.edu
+  experience_years: 20
+  first_name: Виталий
+  id_teacher: 24
+  last_name: Киселев
+- academic_degree: Доктор наук
+  administrative_position: Профессор
+  email: kiselev@university.edu
+  experience_years: 20
+  first_name: Виталий
+  id_teacher: 28
+  last_name: Киселев
+- academic_degree: Доктор наук
+  administrative_position: Профессор
+  email: kiselev@university.edu
+  experience_years: 20
+  first_name: Виталий
+  id_teacher: 32
+  last_name: Киселев
+- academic_degree: Доктор наук
+  administrative_position: Профессор
+  email: kiselev@university.edu
+  experience_years: 20
+  first_name: Виталий
+  id_teacher: 36
+  last_name: Киселев
+- academic_degree: Доктор наук
+  administrative_position: Профессор
+  email: kiselev@university.edu
+  experience_years: 20
+  first_name: Виталий
+  id_teacher: 40
+  last_name: Киселев
+- academic_degree: Доктор наук
+  administrative_position: Профессор
+  email: kiselev@university.edu
+  experience_years: 20
+  first_name: Виталий
+  id_teacher: 44
   last_name: Киселев
 - academic_degree: Кандидат наук
   administrative_position: Доцент
@@ -53,6 +165,62 @@
   experience_years: 12
   first_name: Лариса
   id_teacher: 13
+  last_name: Михайлова
+- academic_degree: Кандидат наук
+  administrative_position: Доцент
+  email: mikhailova@university.edu
+  experience_years: 12
+  first_name: Лариса
+  id_teacher: 17
+  last_name: Михайлова
+- academic_degree: Кандидат наук
+  administrative_position: Доцент
+  email: mikhailova@university.edu
+  experience_years: 12
+  first_name: Лариса
+  id_teacher: 21
+  last_name: Михайлова
+- academic_degree: Кандидат наук
+  administrative_position: Доцент
+  email: mikhailova@university.edu
+  experience_years: 12
+  first_name: Лариса
+  id_teacher: 25
+  last_name: Михайлова
+- academic_degree: Кандидат наук
+  administrative_position: Доцент
+  email: mikhailova@university.edu
+  experience_years: 12
+  first_name: Лариса
+  id_teacher: 29
+  last_name: Михайлова
+- academic_degree: Кандидат наук
+  administrative_position: Доцент
+  email: mikhailova@university.edu
+  experience_years: 12
+  first_name: Лариса
+  id_teacher: 33
+  last_name: Михайлова
+- academic_degree: Кандидат наук
+  administrative_position: Доцент
+  email: mikhailova@university.edu
+  experience_years: 12
+  first_name: Лариса
+  id_teacher: 37
+  last_name: Михайлова
+- academic_degree: Кандидат наук
+  administrative_position: Доцент
+  email: mikhailova@university.edu
+  experience_years: 12
+  first_name: Лариса
+  id_teacher: 41
+  last_name: Михайлова
+- academic_degree: Кандидат наук
+  administrative_position: Доцент
+  email: mikhailova@university.edu
+  experience_years: 12
+  first_name: Лариса
+  id_teacher: 45
   last_name: Михайлова
 - academic_degree: Кандидат наук
   administrative_position: Старший преподаватель
@@ -88,4 +256,60 @@
   experience_years: 3
   first_name: Никита
   id_teacher: 14
+  last_name: Титов
+- academic_degree: Кандидат наук
+  administrative_position: Ассистент
+  email: titov@university.edu
+  experience_years: 3
+  first_name: Никита
+  id_teacher: 18
+  last_name: Титов
+- academic_degree: Кандидат наук
+  administrative_position: Ассистент
+  email: titov@university.edu
+  experience_years: 3
+  first_name: Никита
+  id_teacher: 22
+  last_name: Титов
+- academic_degree: Кандидат наук
+  administrative_position: Ассистент
+  email: titov@university.edu
+  experience_years: 3
+  first_name: Никита
+  id_teacher: 26
+  last_name: Титов
+- academic_degree: Кандидат наук
+  administrative_position: Ассистент
+  email: titov@university.edu
+  experience_years: 3
+  first_name: Никита
+  id_teacher: 30
+  last_name: Титов
+- academic_degree: Кандидат наук
+  administrative_position: Ассистент
+  email: titov@university.edu
+  experience_years: 3
+  first_name: Никита
+  id_teacher: 34
+  last_name: Титов
+- academic_degree: Кандидат наук
+  administrative_position: Ассистент
+  email: titov@university.edu
+  experience_years: 3
+  first_name: Никита
+  id_teacher: 38
+  last_name: Титов
+- academic_degree: Кандидат наук
+  administrative_position: Ассистент
+  email: titov@university.edu
+  experience_years: 3
+  first_name: Никита
+  id_teacher: 42
+  last_name: Титов
+- academic_degree: Кандидат наук
+  administrative_position: Ассистент
+  email: titov@university.edu
+  experience_years: 3
+  first_name: Никита
+  id_teacher: 46
   last_name: Титов

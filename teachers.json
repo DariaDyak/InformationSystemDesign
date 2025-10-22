@@ -18,6 +18,78 @@
     "experience_years": 26
   },
   {
+    "id_teacher": 15,
+    "first_name": "Галина",
+    "last_name": "Борисова",
+    "email": "borisova@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Декан",
+    "experience_years": 26
+  },
+  {
+    "id_teacher": 19,
+    "first_name": "Галина",
+    "last_name": "Борисова",
+    "email": "borisova@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Декан",
+    "experience_years": 26
+  },
+  {
+    "id_teacher": 23,
+    "first_name": "Галина",
+    "last_name": "Борисова",
+    "email": "borisova@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Декан",
+    "experience_years": 26
+  },
+  {
+    "id_teacher": 27,
+    "first_name": "Галина",
+    "last_name": "Борисова",
+    "email": "borisova@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Декан",
+    "experience_years": 26
+  },
+  {
+    "id_teacher": 31,
+    "first_name": "Галина",
+    "last_name": "Борисова",
+    "email": "borisova@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Декан",
+    "experience_years": 26
+  },
+  {
+    "id_teacher": 35,
+    "first_name": "Галина",
+    "last_name": "Борисова",
+    "email": "borisova@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Декан",
+    "experience_years": 26
+  },
+  {
+    "id_teacher": 39,
+    "first_name": "Галина",
+    "last_name": "Борисова",
+    "email": "borisova@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Декан",
+    "experience_years": 26
+  },
+  {
+    "id_teacher": 43,
+    "first_name": "Галина",
+    "last_name": "Борисова",
+    "email": "borisova@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Декан",
+    "experience_years": 26
+  },
+  {
     "id_teacher": 1,
     "first_name": "Ирина",
     "last_name": "Валерьева",
@@ -45,6 +117,78 @@
     "experience_years": 20
   },
   {
+    "id_teacher": 16,
+    "first_name": "Виталий",
+    "last_name": "Киселев",
+    "email": "kiselev@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Профессор",
+    "experience_years": 20
+  },
+  {
+    "id_teacher": 20,
+    "first_name": "Виталий",
+    "last_name": "Киселев",
+    "email": "kiselev@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Профессор",
+    "experience_years": 20
+  },
+  {
+    "id_teacher": 24,
+    "first_name": "Виталий",
+    "last_name": "Киселев",
+    "email": "kiselev@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Профессор",
+    "experience_years": 20
+  },
+  {
+    "id_teacher": 28,
+    "first_name": "Виталий",
+    "last_name": "Киселев",
+    "email": "kiselev@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Профессор",
+    "experience_years": 20
+  },
+  {
+    "id_teacher": 32,
+    "first_name": "Виталий",
+    "last_name": "Киселев",
+    "email": "kiselev@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Профессор",
+    "experience_years": 20
+  },
+  {
+    "id_teacher": 36,
+    "first_name": "Виталий",
+    "last_name": "Киселев",
+    "email": "kiselev@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Профессор",
+    "experience_years": 20
+  },
+  {
+    "id_teacher": 40,
+    "first_name": "Виталий",
+    "last_name": "Киселев",
+    "email": "kiselev@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Профессор",
+    "experience_years": 20
+  },
+  {
+    "id_teacher": 44,
+    "first_name": "Виталий",
+    "last_name": "Киселев",
+    "email": "kiselev@university.edu",
+    "academic_degree": "Доктор наук",
+    "administrative_position": "Профессор",
+    "experience_years": 20
+  },
+  {
     "id_teacher": 4,
     "first_name": "Мария",
     "last_name": "Кузнецова",
@@ -64,6 +208,78 @@
   },
   {
     "id_teacher": 13,
+    "first_name": "Лариса",
+    "last_name": "Михайлова",
+    "email": "mikhailova@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Доцент",
+    "experience_years": 12
+  },
+  {
+    "id_teacher": 17,
+    "first_name": "Лариса",
+    "last_name": "Михайлова",
+    "email": "mikhailova@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Доцент",
+    "experience_years": 12
+  },
+  {
+    "id_teacher": 21,
+    "first_name": "Лариса",
+    "last_name": "Михайлова",
+    "email": "mikhailova@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Доцент",
+    "experience_years": 12
+  },
+  {
+    "id_teacher": 25,
+    "first_name": "Лариса",
+    "last_name": "Михайлова",
+    "email": "mikhailova@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Доцент",
+    "experience_years": 12
+  },
+  {
+    "id_teacher": 29,
+    "first_name": "Лариса",
+    "last_name": "Михайлова",
+    "email": "mikhailova@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Доцент",
+    "experience_years": 12
+  },
+  {
+    "id_teacher": 33,
+    "first_name": "Лариса",
+    "last_name": "Михайлова",
+    "email": "mikhailova@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Доцент",
+    "experience_years": 12
+  },
+  {
+    "id_teacher": 37,
+    "first_name": "Лариса",
+    "last_name": "Михайлова",
+    "email": "mikhailova@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Доцент",
+    "experience_years": 12
+  },
+  {
+    "id_teacher": 41,
+    "first_name": "Лариса",
+    "last_name": "Михайлова",
+    "email": "mikhailova@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Доцент",
+    "experience_years": 12
+  },
+  {
+    "id_teacher": 45,
     "first_name": "Лариса",
     "last_name": "Михайлова",
     "email": "mikhailova@university.edu",
@@ -109,6 +325,78 @@
   },
   {
     "id_teacher": 14,
+    "first_name": "Никита",
+    "last_name": "Титов",
+    "email": "titov@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Ассистент",
+    "experience_years": 3
+  },
+  {
+    "id_teacher": 18,
+    "first_name": "Никита",
+    "last_name": "Титов",
+    "email": "titov@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Ассистент",
+    "experience_years": 3
+  },
+  {
+    "id_teacher": 22,
+    "first_name": "Никита",
+    "last_name": "Титов",
+    "email": "titov@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Ассистент",
+    "experience_years": 3
+  },
+  {
+    "id_teacher": 26,
+    "first_name": "Никита",
+    "last_name": "Титов",
+    "email": "titov@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Ассистент",
+    "experience_years": 3
+  },
+  {
+    "id_teacher": 30,
+    "first_name": "Никита",
+    "last_name": "Титов",
+    "email": "titov@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Ассистент",
+    "experience_years": 3
+  },
+  {
+    "id_teacher": 34,
+    "first_name": "Никита",
+    "last_name": "Титов",
+    "email": "titov@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Ассистент",
+    "experience_years": 3
+  },
+  {
+    "id_teacher": 38,
+    "first_name": "Никита",
+    "last_name": "Титов",
+    "email": "titov@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Ассистент",
+    "experience_years": 3
+  },
+  {
+    "id_teacher": 42,
+    "first_name": "Никита",
+    "last_name": "Титов",
+    "email": "titov@university.edu",
+    "academic_degree": "Кандидат наук",
+    "administrative_position": "Ассистент",
+    "experience_years": 3
+  },
+  {
+    "id_teacher": 46,
     "first_name": "Никита",
     "last_name": "Титов",
     "email": "titov@university.edu",

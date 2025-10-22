@@ -1,7 +1,7 @@
 from TeacherRepJson import TeacherRepJson
 from TeacherRepYaml import TeacherRepYaml
 from TeacherRepDB import TeacherRepDB
-from DBConnection import DBConnection
+from DatabaseManager import DatabaseManager
 
 def print_separator(title):
     print(f"\n{title}")
@@ -304,7 +304,22 @@ def demo_database_format():
     """Демонстрация работы с базой данных PostgreSQL"""
     print_separator("ДЕМОНСТРАЦИЯ РАБОТЫ С БАЗОЙ ДАННЫХ")
 
-    db_connection = DBConnection(
+    try:
+        # Используем синглтон DatabaseManager
+        db_manager = DatabaseManager()  # Создаем экземпляр класса
+        if not db_manager.connect():
+            print("Не удалось подключиться к базе данных")
+            return None
+
+        # Создаем TeacherRepDB который делегирует работу к DatabaseManager
+        teacher_manager = TeacherRepDB()
+        return demo_format(teacher_manager, "DATABASE")
+
+    except Exception as e:
+        print(f"Ошибка при работе с базой данных: {e}")
+        return None
+
+    '''db_connection = DBConnection(
         dbname="postgres",
         user="postgres",
         password="password",
@@ -324,7 +339,7 @@ def demo_database_format():
         print(f"Ошибка при работе с базой данных: {e}")
         return None
     finally:
-        db_connection.disconnect()
+        db_connection.disconnect()'''
 
 
 def main():

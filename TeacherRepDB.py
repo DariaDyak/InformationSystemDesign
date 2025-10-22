@@ -1,14 +1,14 @@
 from typing import List, Dict, Any, Optional
-from DBConnection import DBConnection
+from DatabaseManager import DatabaseManager
 
 class TeacherRepDB:
-    def __init__(self, db_connection: DBConnection):
-        self.db = db_connection
+    def __init__(self):
+        self.db = DatabaseManager()  # Создаем экземпляр класса
         self._ensure_table_exists()
         self._fill_initial_data()
 
     def _ensure_table_exists(self):
-        """Создать таблицу teachers (пересоздает если существует)"""
+        """Создать таблицу teachers если она не существует"""
         # Всегда удаляем и создаем заново для чистого старта
         drop_query = "DROP TABLE IF EXISTS teachers CASCADE"
         self.db.execute_query(drop_query)
