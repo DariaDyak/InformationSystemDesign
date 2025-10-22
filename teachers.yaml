@@ -1,0 +1,70 @@
+- id_teacher: 1
+  first_name: "Ирина"
+  last_name: "Валерьева"
+  email: "irina@example.com"
+  academic_degree: "Доктор наук"
+  administrative_position: "Зав кафедрой"
+  experience_years: 10
+- id_teacher: 2
+  first_name: "Мария"
+  last_name: "Алегрова"
+  email: "alegrova_m@yandex.ru"
+  academic_degree: "Кандидат наук"
+  administrative_position: "Доцент"
+  experience_years: 16
+- id_teacher: 3
+  first_name: "Александр"
+  last_name: "Смирнов"
+  email: "smirnov@university.edu"
+  academic_degree: "Доктор наук"
+  administrative_position: "Декан"
+  experience_years: 22
+- id_teacher: 4
+  first_name: "Мария"
+  last_name: "Кузнецова"
+  email: "kuznetsova@university.edu"
+  academic_degree: "Кандидат наук"
+  administrative_position: "Доцент"
+  experience_years: 14
+- id_teacher: 5
+  first_name: "Дмитрий"
+  last_name: "Попов"
+  email: "popov@university.edu"
+  academic_degree: "Доктор наук"
+  administrative_position: "Зав кафедрой"
+  experience_years: 18
+- id_teacher: 6
+  first_name: "Елена"
+  last_name: "Васильева"
+  email: "vasilieva@university.edu"
+  academic_degree: "Кандидат наук"
+  administrative_position: "Старший преподаватель"
+  experience_years: 9
+- id_teacher: 7
+  first_name: "Сергей"
+  last_name: "Петров"
+  email: "petrov@university.edu"
+  academic_degree: "Доктор наук"
+  administrative_position: "Профессор"
+  experience_years: 25
+- id_teacher: 8
+  first_name: "Ольга"
+  last_name: "Соколова"
+  email: "sokolova@university.edu"
+  academic_degree: "Кандидат наук"
+  administrative_position: "Доцент"
+  experience_years: 12
+- id_teacher: 9
+  first_name: "Андрей"
+  last_name: "Михайлов"
+  email: "mikhailov@university.edu"
+  academic_degree: "Доктор наук"
+  administrative_position: "Зав кафедрой"
+  experience_years: 20
+- id_teacher: 10
+  first_name: "Наталья"
+  last_name: "Новикова"
+  email: "novikova@university.edu"
+  academic_degree: "Кандидат наук"
+  administrative_position: "Старший преподаватель"
+  experience_years: 8
