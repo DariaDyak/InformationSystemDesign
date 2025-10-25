@@ -4,6 +4,8 @@ from TeacherRepYaml import TeacherRepYaml
 from TeacherRepDB import TeacherRepDB
 from DatabaseManager import DatabaseManager
 from TeacherDBAdapter import TeacherDBAdapter
+from TeacherRepDecorator import (TeacherRepDecorator, ExperienceFilter, AcademicDegreeFilter, SurnameFilter,
+                                 TeacherSorter, CompositeFilter)
 
 def print_separator(title):
     print(f"\n{title}")
@@ -394,6 +396,147 @@ def demo_adapter_vs_direct():
         print(f"Ошибка при сравнительной демонстрации: {e}")
         return None
 
+def demo_decorator_functionality():
+    """Демонстрация работы декоратора с фильтрами и сортировками"""
+    print_separator("ДЕМОНСТРАЦИЯ ПАТТЕРНА ДЕКОРАТОР ДЛЯ БАЗЫ ДАННЫХ")
+
+    try:
+        base_db_repo = TeacherRepDB()
+
+        # 1. Демонстрация фильтрации по опыту работы
+        print("\n1. Преподаватели с опытом > 15 лет")
+        experience_filter = ExperienceFilter(min_experience=15)
+        filtered_repo = TeacherRepDecorator(base_db_repo)
+        filtered_repo.add_filter(experience_filter)
+
+        filtered_count = filtered_repo.get_count()
+        filtered_list = filtered_repo.get_k_n_short_list(10, 1)
+
+        print(f"   Найдено преподавателей: {filtered_count}")
+        for teacher in filtered_list:
+            print(f"   - {teacher['last_name']} {teacher['first_name']} ({teacher['experience_years']} лет)")
+
+        # 2. Демонстрация фильтрации по ученой степени
+        print("\n2. Доктора наук")
+        degree_filter = AcademicDegreeFilter("Доктор наук")
+        doctors_repo = TeacherRepDecorator(base_db_repo)
+        doctors_repo.add_filter(degree_filter)
+
+        doctors_count = doctors_repo.get_count()
+        doctors_list = doctors_repo.get_k_n_short_list(10, 1)
+
+        print(f"   Докторов наук: {doctors_count}")
+        for teacher in doctors_list:
+            print(f"   - {teacher['last_name']} {teacher['first_name']}")
+
+        # 3. Демонстрация сортировки
+        print("\n3. По фамилии (по убыванию)")
+        sorted_repo = TeacherRepDecorator(base_db_repo)
+        sorted_repo.set_sorter(TeacherSorter.by_surname(reverse=True))
+
+        sorted_list = sorted_repo.get_k_n_short_list(5, 1)
+
+        print("   Первые 5 преподавателей отсортированных по фамилии (Z-A):")
+        for teacher in sorted_list:
+            print(f"   - {teacher['last_name']} {teacher['first_name']}")
+
+        # 4. Демонстрация фильтрации по фамилии
+        print("\n4. Фамилия начинается на 'С'")
+        surname_filter = SurnameFilter("С")
+        surname_repo = TeacherRepDecorator(base_db_repo)
+        surname_repo.add_filter(surname_filter)
+
+        surname_count = surname_repo.get_count()
+        surname_list = surname_repo.get_k_n_short_list(10, 1)
+
+        print(f"   Преподавателей с фамилией на 'С': {surname_count}")
+        for teacher in surname_list:
+            print(f"   - {teacher['last_name']} {teacher['first_name']}")
+
+        # 5. Демонстрация комбинированной фильтрации и сортировки
+        print("\n5. Доктора наук с опытом > 10 лет, отсортированные по фамилии")
+        composite_filter = CompositeFilter()
+        composite_filter.add_filter(AcademicDegreeFilter("Доктор наук"))
+        composite_filter.add_filter(ExperienceFilter(min_experience=10))
+
+        combined_repo = TeacherRepDecorator(base_db_repo)
+        combined_repo.add_filter(composite_filter)
+        combined_repo.set_sorter(TeacherSorter.by_surname())
+
+        combined_count = combined_repo.get_count()
+        combined_list = combined_repo.get_k_n_short_list(10, 1)
+
+        print(f"   Докторов наук с опытом > 10 лет: {combined_count}")
+        for teacher in combined_list:
+            print(f"   - {teacher['last_name']} {teacher['first_name']} ({teacher['experience_years']} лет)")
+
+        # 6. Демонстрация разных способов сортировки
+        print("\n6. РАЗНЫЕ ВАРИАНТЫ СОРТИРОВКИ")
+
+        sort_options = [
+            ("по фамилии (А-Я)", TeacherSorter.by_surname()),
+            ("по опыту (по убыванию)", TeacherSorter.by_experience(reverse=True)),
+            ("по ученой степени", TeacherSorter.by_academic_degree()),
+            ("по должности", TeacherSorter.by_position())
+        ]
+
+        for sort_name, sorter in sort_options:
+            sorted_repo = TeacherRepDecorator(base_db_repo)
+            sorted_repo.set_sorter(sorter)
+            sorted_list = sorted_repo.get_k_n_short_list(3, 1)
+            print(f"   {sort_name}:")
+            for teacher in sorted_list:
+                if "опыту" in sort_name:
+                    print(f"     - {teacher['last_name']} ({teacher['experience_years']} лет)")
+                elif "ученой степени" in sort_name:
+                    print(f"     - {teacher['last_name']} ({teacher['academic_degree']})")
+                elif "должности" in sort_name:
+                    print(f"     - {teacher['last_name']} ({teacher['administrative_position']})")
+                else:
+                    print(f"     - {teacher['last_name']} {teacher['first_name']}")
+
+        return base_db_repo
+
+    except Exception as e:
+        print(f"Ошибка при демонстрации декораторов: {e}")
+        return None
+
+def demo_decorator_with_pagination():
+    """Демонстрация работы декоратора с пагинацией"""
+    print_separator("ДЕКОРАТОР С ПАГИНАЦИЕЙ")
+
+    try:
+        # Создаем репозиторий с фильтром и сортировкой
+        base_repo = TeacherRepDB()
+
+        # Фильтр: кандидаты наук с опытом > 10 лет, сортировка по фамилии
+        composite_filter = CompositeFilter()
+        composite_filter.add_filter(AcademicDegreeFilter("Кандидат наук"))
+        composite_filter.add_filter(ExperienceFilter(min_experience=10))
+
+        decorated_repo = TeacherRepDecorator(base_repo)
+        decorated_repo.add_filter(composite_filter)
+        decorated_repo.set_sorter(TeacherSorter.by_surname())
+
+        total_count = decorated_repo.get_count()
+        print(f"Всего кандидатов наук с опытом > 10 лет: {total_count}")
+
+        page_size = 3
+        total_pages = (total_count + page_size - 1) // page_size
+
+        for page in range(1, total_pages + 1):
+            print(f"\nСтраница {page}/{total_pages}:")
+            page_data = decorated_repo.get_k_n_short_list(page_size, page)
+            for teacher in page_data:
+                print(f"   - {teacher['last_name']} {teacher['first_name']} ({teacher['experience_years']} лет)")
+        demo_interactive_pagination(decorated_repo, "фильтр: кандидаты наук + опыт > 10 лет")
+
+        return decorated_repo
+
+    except Exception as e:
+        print(f"Ошибка при демонстрации пагинации: {e}")
+        return None
+
 def main():
     # Демонстрация работы с JSON
     json_manager = demo_format(TeacherRepJson("teachers.json"), "JSON")
@@ -407,6 +550,10 @@ def main():
     managers['adapter'] = adapter_manager
     comparison_manager = demo_adapter_vs_direct()
     managers['comparison'] = comparison_manager
+    # Демонстрация функциональности декоратора
+    decorator_demo = demo_decorator_functionality()
+    # Демонстрация пагинации с декоратором
+    pagination_demo = demo_decorator_with_pagination()
 
 if __name__ == "__main__":
     main()
