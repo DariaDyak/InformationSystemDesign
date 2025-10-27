@@ -1,11 +1,9 @@
-import BaseTeacherRepository
 from TeacherRepJson import TeacherRepJson
 from TeacherRepYaml import TeacherRepYaml
 from TeacherRepDB import TeacherRepDB
 from DatabaseManager import DatabaseManager
 from TeacherDBAdapter import TeacherDBAdapter
-from TeacherRepDecorator import (TeacherRepDecorator, ExperienceFilter, AcademicDegreeFilter, SurnameFilter,
-                                 TeacherSorter, CompositeFilter)
+from TeacherRepDecorator import (TeacherRepDecorator, ExperienceFilter, AcademicDegreeFilter, SurnameFilter, TeacherSorter, CompositeFilter)
 
 def print_separator(title):
     print(f"\n{title}")
@@ -537,6 +535,27 @@ def demo_decorator_with_pagination():
         print(f"Ошибка при демонстрации пагинации: {e}")
         return None
 
+def demo_decorator_with_yaml():
+    """Демонстрация работы декоратора с YAML файлом"""
+    print_separator("ДЕКОРАТОР С YAML ФАЙЛОМ")
+
+    base_yaml_repo = TeacherRepYaml("teachers.yaml")
+    decorated_repo = TeacherRepDecorator(base_yaml_repo)
+
+    print("Фильтрация по фамилии (начинается на 'С')")
+    surname_filter = SurnameFilter("С")
+    decorated_repo.add_filter(surname_filter)
+    decorated_repo.set_sorter(TeacherSorter.by_surname())
+
+    count = decorated_repo.get_count()
+    print(f"   Преподавателей с фамилией на 'С': {count}")
+
+    teachers = decorated_repo.get_k_n_short_list(10, 1)
+    for teacher in teachers:
+        print(f"   - {teacher['last_name']} {teacher['first_name']}")
+
+    return decorated_repo
+
 def main():
     # Демонстрация работы с JSON
     json_manager = demo_format(TeacherRepJson("teachers.json"), "JSON")
@@ -550,10 +569,12 @@ def main():
     managers['adapter'] = adapter_manager
     comparison_manager = demo_adapter_vs_direct()
     managers['comparison'] = comparison_manager
-    # Демонстрация функциональности декоратора
+    # Демонстрация функциональности декоратора с бд
     decorator_demo = demo_decorator_functionality()
     # Демонстрация пагинации с декоратором
     pagination_demo = demo_decorator_with_pagination()
+    # Демонстрация функциональности декоратора с файлами
+    yaml_decorator = demo_decorator_with_yaml()
 
 if __name__ == "__main__":
     main()
