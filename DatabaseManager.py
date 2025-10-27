@@ -1,28 +1,32 @@
 import psycopg2
 
+
 class DatabaseManager:
     """
     Singleton класс для управления подключением к базе данных
     с использованием делегации для выполнения запросов
     """
+
     _instance = None
 
-    def __new__(cls, dbname="postgres", user="postgres", password="password",
-                host="localhost", port="5432"):
+    def __new__(
+        cls, dbname="postgres", user="postgres", password="password", host="localhost", port="5432"
+    ):
         if cls._instance is None:
             cls._instance = super(DatabaseManager, cls).__new__(cls)
             cls._instance._initialized = False
         return cls._instance
 
-    def __init__(self, dbname="postgres", user="postgres", password="password",
-                 host="localhost", port="5432"):
+    def __init__(
+        self, dbname="postgres", user="postgres", password="password", host="localhost", port="5432"
+    ):
         if not self._initialized:
             self.connection_params = {
                 "dbname": dbname,
                 "user": user,
                 "password": password,
                 "host": host,
-                "port": port
+                "port": port,
             }
             self.connection = None
             self.is_connected = False
@@ -59,7 +63,7 @@ class DatabaseManager:
         try:
             with self.connection.cursor() as cursor:
                 cursor.execute(query, params)
-                if query.strip().upper().startswith('SELECT') or 'RETURNING' in query.upper():
+                if query.strip().upper().startswith("SELECT") or "RETURNING" in query.upper():
                     return cursor.fetchall()
                 else:
                     self.connection.commit()

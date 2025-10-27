@@ -1,14 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
 
 
 class BaseTeacherRepository(ABC):
-    def __init__(self, file_path: str):
+    def __init__(self, file_path: str) -> None:
         self.file_path = file_path
         self._ensure_file_exists()
 
     @abstractmethod
-    def _ensure_file_exists(self):
+    def _ensure_file_exists(self) -> None:
         """Создать файл если он не существует"""
         pass
 
@@ -26,7 +26,7 @@ class BaseTeacherRepository(ABC):
     def get_by_id(self, id_teacher: int) -> Optional[Dict[str, Any]]:
         data = self.read_all()
         for entity in data:
-            if entity['id_teacher'] == id_teacher:
+            if entity["id_teacher"] == id_teacher:
                 return entity
         return None
 
@@ -39,13 +39,13 @@ class BaseTeacherRepository(ABC):
         short_list = []
         for entity in data[start:end]:
             short_entity = {
-                'id_teacher': entity['id_teacher'],
-                'last_name': entity['last_name'],
-                'first_name': entity['first_name'][0] + '.',
-                'email': entity['email'],
-                'academic_degree': entity['academic_degree'],
-                'administrative_position': entity['administrative_position'],
-                'experience_years': entity['experience_years'],
+                "id_teacher": entity["id_teacher"],
+                "last_name": entity["last_name"],
+                "first_name": entity["first_name"][0] + ".",
+                "email": entity["email"],
+                "academic_degree": entity["academic_degree"],
+                "administrative_position": entity["administrative_position"],
+                "experience_years": entity["experience_years"],
             }
             short_list.append(short_entity)
 
@@ -59,23 +59,29 @@ class BaseTeacherRepository(ABC):
         return "ок"
 
     # f. Добавить объект в список (при добавлении сформировать новый ID)
-    def add_teacher(self, first_name: str, last_name: str, email: str,
-                   academic_degree: str, administrative_position: str,
-                   experience_years: int) -> int:
+    def add_teacher(
+        self,
+        first_name: str,
+        last_name: str,
+        email: str,
+        academic_degree: str,
+        administrative_position: str,
+        experience_years: int,
+    ) -> int:
         data = self.read_all()
 
         new_id = 1
         if data:
-            new_id = max(entity['id_teacher'] for entity in data) + 1
+            new_id = max(entity["id_teacher"] for entity in data) + 1
 
         new_entity = {
-            'id_teacher': new_id,
-            'first_name': first_name,
-            'last_name': last_name,
-            'email': email,
-            'academic_degree': academic_degree,
-            'administrative_position': administrative_position,
-            'experience_years': experience_years
+            "id_teacher": new_id,
+            "first_name": first_name,
+            "last_name": last_name,
+            "email": email,
+            "academic_degree": academic_degree,
+            "administrative_position": administrative_position,
+            "experience_years": experience_years,
         }
 
         data.append(new_entity)
@@ -83,10 +89,16 @@ class BaseTeacherRepository(ABC):
         return new_id
 
     # g. Заменить элемент списка по ID
-    def update_teacher(self, id_teacher: int, first_name: str = None,
-                      last_name: str = None, email: str = None,
-                      academic_degree: str = None, administrative_position: str = None,
-                      experience_years: int = None) -> Optional[Dict[str, Any]]:
+    def update_teacher(
+        self,
+        id_teacher: int,
+        first_name: Optional[str] = None,
+        last_name: Optional[str] = None,
+        email: Optional[str] = None,
+        academic_degree: Optional[str] = None,
+        administrative_position: Optional[str] = None,
+        experience_years: Optional[int] = None,
+    ) -> Optional[Dict[str, Any]]:
         data = self.read_all()
         entity = self.get_by_id(id_teacher)
 
@@ -94,19 +106,19 @@ class BaseTeacherRepository(ABC):
             return None
 
         for i, item in enumerate(data):
-            if item['id_teacher'] == id_teacher:
+            if item["id_teacher"] == id_teacher:
                 if first_name:
-                    data[i]['first_name'] = first_name
+                    data[i]["first_name"] = first_name
                 if last_name:
-                    data[i]['last_name'] = last_name
+                    data[i]["last_name"] = last_name
                 if email:
-                    data[i]['email'] = email
+                    data[i]["email"] = email
                 if academic_degree:
-                    data[i]['academic_degree'] = academic_degree
+                    data[i]["academic_degree"] = academic_degree
                 if administrative_position:
-                    data[i]['administrative_position'] = administrative_position
+                    data[i]["administrative_position"] = administrative_position
                 if experience_years is not None:
-                    data[i]['experience_years'] = experience_years
+                    data[i]["experience_years"] = experience_years
                 self.write_all(data)
                 return data[i]
         return None

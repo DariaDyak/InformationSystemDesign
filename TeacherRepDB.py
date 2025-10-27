@@ -1,13 +1,15 @@
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
+
 from DatabaseManager import DatabaseManager
 
+
 class TeacherRepDB:
-    def __init__(self):
+    def __init__(self) -> None:
         self.db = DatabaseManager()  # Создаем экземпляр класса
         self._ensure_table_exists()
         self._fill_initial_data()
 
-    def _ensure_table_exists(self):
+    def _ensure_table_exists(self) -> None:
         """Создать таблицу teachers если она не существует"""
         # Всегда удаляем и создаем заново для чистого старта
         drop_query = "DROP TABLE IF EXISTS teachers CASCADE"
@@ -26,7 +28,7 @@ class TeacherRepDB:
         """
         self.db.execute_query(create_table_query)
 
-    def _fill_initial_data(self):
+    def _fill_initial_data(self) -> None:
         """Заполнить таблицу начальными данными если она пустая"""
         if self.get_count() == 0:
             teachers_data = [
@@ -35,11 +37,32 @@ class TeacherRepDB:
                 ("Александр", "Смирнов", "smirnov@university.edu", "Доктор наук", "Декан", 22),
                 ("Мария", "Кузнецова", "kuznetsova@university.edu", "Кандидат наук", "Доцент", 14),
                 ("Дмитрий", "Попов", "popov@university.edu", "Доктор наук", "Зав кафедрой", 18),
-                ("Елена", "Васильева", "vasilieva@university.edu", "Кандидат наук", "Старший преподаватель", 9),
-                ("Сергей", "Петров", "petrov@university.edu", "Доктор наук", "Профессор", 25),
+                (
+                    "Елена",
+                    "Васильева",
+                    "vasilieva@university.edu",
+                    "Кандидат наук",
+                    "Старший преподаватель",
+                    9,
+                ),
+                ("Сергей", "Петrov", "petrov@university.edu", "Доктор наук", "Профессор", 25),
                 ("Ольга", "Соколова", "sokolova@university.edu", "Кандидат наук", "Доцент", 12),
-                ("Андрей", "Михайлов", "mikhailov@university.edu", "Доктор наук", "Зав кафедрой", 20),
-                ("Наталья", "Новикова", "novikova@university.edu", "Кандидат наук", "Старший преподаватель", 8)
+                (
+                    "Андрей",
+                    "Михайлов",
+                    "mikhailov@university.edu",
+                    "Доктор наук",
+                    "Зав кафедрой",
+                    20,
+                ),
+                (
+                    "Наталья",
+                    "Новикова",
+                    "novikova@university.edu",
+                    "Кандидат наук",
+                    "Старший преподаватель",
+                    8,
+                ),
             ]
 
             added_count = 0
@@ -52,14 +75,14 @@ class TeacherRepDB:
 
             print(f"Добавлено {added_count} преподавателей")
         else:
-            current_count = self.get_count()
+            print(f"В базе уже есть {self.get_count()} преподавателей")
 
     def read_all(self) -> List[Dict[str, Any]]:
         """Чтение всех значений из базы данных"""
         query = """
-        SELECT id_teacher, first_name, last_name, email, academic_degree, 
-               administrative_position, experience_years 
-        FROM teachers 
+        SELECT id_teacher, first_name, last_name, email, academic_degree,
+               administrative_position, experience_years
+        FROM teachers
         ORDER BY id_teacher
         """
         result = self.db.execute_query(query)
@@ -67,15 +90,17 @@ class TeacherRepDB:
         teachers = []
         if result:
             for row in result:
-                teachers.append({
-                    'id_teacher': row[0],
-                    'first_name': row[1],
-                    'last_name': row[2],
-                    'email': row[3],
-                    'academic_degree': row[4],
-                    'administrative_position': row[5],
-                    'experience_years': row[6]
-                })
+                teachers.append(
+                    {
+                        "id_teacher": row[0],
+                        "first_name": row[1],
+                        "last_name": row[2],
+                        "email": row[3],
+                        "academic_degree": row[4],
+                        "administrative_position": row[5],
+                        "experience_years": row[6],
+                    }
+                )
         return teachers
 
     def write_all(self, data: List[Dict[str, Any]]) -> str:
@@ -85,27 +110,30 @@ class TeacherRepDB:
 
         for teacher in data:
             query = """
-            INSERT INTO teachers (id_teacher, first_name, last_name, email, 
-                                academic_degree, administrative_position, experience_years) 
+            INSERT INTO teachers (id_teacher, first_name, last_name, email,
+                                academic_degree, administrative_position, experience_years)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
             """
-            self.db.execute_query(query, (
-                teacher['id_teacher'],
-                teacher['first_name'],
-                teacher['last_name'],
-                teacher['email'],
-                teacher['academic_degree'],
-                teacher['administrative_position'],
-                teacher['experience_years']
-            ))
+            self.db.execute_query(
+                query,
+                (
+                    teacher["id_teacher"],
+                    teacher["first_name"],
+                    teacher["last_name"],
+                    teacher["email"],
+                    teacher["academic_degree"],
+                    teacher["administrative_position"],
+                    teacher["experience_years"],
+                ),
+            )
 
         return "ок"
 
-    def clear_table_completely(self):
+    def clear_table_completely(self) -> bool:
         """Полностью очистить таблицу и сбросить последовательность ID"""
         try:
             query = "TRUNCATE TABLE teachers RESTART IDENTITY CASCADE"
-            result = self.db.execute_query(query)
+            self.db.execute_query(query)
             print("Таблица полностью очищена, последовательность ID сброшена")
             return True
         except Exception as e:
@@ -115,9 +143,9 @@ class TeacherRepDB:
     # a. Получить объект по ID
     def get_by_id(self, id_teacher: int) -> Optional[Dict[str, Any]]:
         query = """
-        SELECT id_teacher, first_name, last_name, email, academic_degree, 
-               administrative_position, experience_years 
-        FROM teachers 
+        SELECT id_teacher, first_name, last_name, email, academic_degree,
+               administrative_position, experience_years
+        FROM teachers
         WHERE id_teacher = %s
         """
         result = self.db.execute_query(query, (id_teacher,))
@@ -125,13 +153,13 @@ class TeacherRepDB:
         if result and len(result) > 0:
             row = result[0]
             return {
-                'id_teacher': row[0],
-                'first_name': row[1],
-                'last_name': row[2],
-                'email': row[3],
-                'academic_degree': row[4],
-                'administrative_position': row[5],
-                'experience_years': row[6]
+                "id_teacher": row[0],
+                "first_name": row[1],
+                "last_name": row[2],
+                "email": row[3],
+                "academic_degree": row[4],
+                "administrative_position": row[5],
+                "experience_years": row[6],
             }
         return None
 
@@ -139,10 +167,10 @@ class TeacherRepDB:
     def get_k_n_short_list(self, k: int, n: int) -> List[Dict[str, Any]]:
         offset = (n - 1) * k
         query = """
-        SELECT id_teacher, first_name, last_name, email, academic_degree, 
-               administrative_position, experience_years 
-        FROM teachers 
-        ORDER BY id_teacher 
+        SELECT id_teacher, first_name, last_name, email, academic_degree,
+               administrative_position, experience_years
+        FROM teachers
+        ORDER BY id_teacher
         LIMIT %s OFFSET %s
         """
         result = self.db.execute_query(query, (k, offset))
@@ -151,13 +179,13 @@ class TeacherRepDB:
         if result:
             for row in result:
                 short_entity = {
-                    'id_teacher': row[0],
-                    'last_name': row[2],
-                    'first_name': row[1][0] + '.',
-                    'email': row[3],
-                    'academic_degree': row[4],
-                    'administrative_position': row[5],
-                    'experience_years': row[6],
+                    "id_teacher": row[0],
+                    "last_name": row[2],
+                    "first_name": row[1][0] + ".",
+                    "email": row[3],
+                    "academic_degree": row[4],
+                    "administrative_position": row[5],
+                    "experience_years": row[6],
                 }
                 short_list.append(short_entity)
 
@@ -168,20 +196,33 @@ class TeacherRepDB:
         return "ок"
 
     # d. Добавить объект в список (при добавлении сформировать новый ID)
-    def add_teacher(self, first_name: str, last_name: str, email: str,
-                    academic_degree: str, administrative_position: str,
-                    experience_years: int) -> int:
+    def add_teacher(
+        self,
+        first_name: str,
+        last_name: str,
+        email: str,
+        academic_degree: str,
+        administrative_position: str,
+        experience_years: int,
+    ) -> int:
         try:
             query = """
-            INSERT INTO teachers (first_name, last_name, email, academic_degree, 
-                                administrative_position, experience_years) 
-            VALUES (%s, %s, %s, %s, %s, %s) 
+            INSERT INTO teachers (first_name, last_name, email, academic_degree,
+                                administrative_position, experience_years)
+            VALUES (%s, %s, %s, %s, %s, %s)
             RETURNING id_teacher
             """
-            result = self.db.execute_query(query, (
-                first_name, last_name, email, academic_degree,
-                administrative_position, experience_years
-            ))
+            result = self.db.execute_query(
+                query,
+                (
+                    first_name,
+                    last_name,
+                    email,
+                    academic_degree,
+                    administrative_position,
+                    experience_years,
+                ),
+            )
 
             if result and len(result) > 0 and result[0]:
                 new_id = result[0][0]
@@ -196,39 +237,58 @@ class TeacherRepDB:
             return -1
 
     # e. Заменить элемент списка по ID
-    def update_teacher(self, id_teacher: int, first_name: str = None,
-                       last_name: str = None, email: str = None,
-                       academic_degree: str = None, administrative_position: str = None,
-                       experience_years: int = None) -> Optional[Dict[str, Any]]:
+    def update_teacher(
+        self,
+        id_teacher: int,
+        first_name: Optional[str] = None,
+        last_name: Optional[str] = None,
+        email: Optional[str] = None,
+        academic_degree: Optional[str] = None,
+        administrative_position: Optional[str] = None,
+        experience_years: Optional[int] = None,
+    ) -> Optional[Dict[str, Any]]:
 
         current_teacher = self.get_by_id(id_teacher)
         if not current_teacher:
             return None
 
         update_data = {
-            'first_name': first_name if first_name else current_teacher['first_name'],
-            'last_name': last_name if last_name else current_teacher['last_name'],
-            'email': email if email else current_teacher['email'],
-            'academic_degree': academic_degree if academic_degree else current_teacher['academic_degree'],
-            'administrative_position': administrative_position if administrative_position else current_teacher['administrative_position'],
-            'experience_years': experience_years if experience_years is not None else current_teacher['experience_years']
+            "first_name": first_name if first_name else current_teacher["first_name"],
+            "last_name": last_name if last_name else current_teacher["last_name"],
+            "email": email if email else current_teacher["email"],
+            "academic_degree": (
+                academic_degree if academic_degree else current_teacher["academic_degree"]
+            ),
+            "administrative_position": (
+                administrative_position
+                if administrative_position
+                else current_teacher["administrative_position"]
+            ),
+            "experience_years": (
+                experience_years
+                if experience_years is not None
+                else current_teacher["experience_years"]
+            ),
         }
 
         query = """
-        UPDATE teachers 
-        SET first_name = %s, last_name = %s, email = %s, academic_degree = %s, 
+        UPDATE teachers
+        SET first_name = %s, last_name = %s, email = %s, academic_degree = %s,
             administrative_position = %s, experience_years = %s
         WHERE id_teacher = %s
         """
-        result = self.db.execute_query(query, (
-            update_data['first_name'],
-            update_data['last_name'],
-            update_data['email'],
-            update_data['academic_degree'],
-            update_data['administrative_position'],
-            update_data['experience_years'],
-            id_teacher
-        ))
+        result = self.db.execute_query(
+            query,
+            (
+                update_data["first_name"],
+                update_data["last_name"],
+                update_data["email"],
+                update_data["academic_degree"],
+                update_data["administrative_position"],
+                update_data["experience_years"],
+                id_teacher,
+            ),
+        )
 
         if result == 1:
             return self.get_by_id(id_teacher)

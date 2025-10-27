@@ -1,18 +1,21 @@
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
+
 from BaseTeacherRepository import BaseTeacherRepository
 from TeacherRepDB import TeacherRepDB
+
 
 class TeacherDBAdapter(BaseTeacherRepository):
     """
     Адаптер для интеграции TeacherRepDB (PostgreSQL)
     в иерархию BaseTeacherRepository
     """
-    def __init__(self, file_path: str = ""):
+
+    def __init__(self, file_path: str = "") -> None:
         # file_path игнорируется для БД, но требуется конструктором базового класса
         super().__init__(file_path)
         self.teacher_rep_db = TeacherRepDB()
 
-    def _ensure_file_exists(self):
+    def _ensure_file_exists(self) -> None:
         """
         Для БД этот метод обеспечивает существование таблицы.
         В базовом классе это создание файла, здесь - создание таблицы.
@@ -43,23 +46,39 @@ class TeacherDBAdapter(BaseTeacherRepository):
         """
         return self.teacher_rep_db.sort_by_field(field)
 
-    def add_teacher(self, first_name: str, last_name: str, email: str,
-                    academic_degree: str, administrative_position: str,
-                    experience_years: int) -> int:
+    def add_teacher(
+        self,
+        first_name: str,
+        last_name: str,
+        email: str,
+        academic_degree: str,
+        administrative_position: str,
+        experience_years: int,
+    ) -> int:
         """Добавление нового преподавателя в БД"""
         return self.teacher_rep_db.add_teacher(
-            first_name, last_name, email, academic_degree,
-            administrative_position, experience_years
+            first_name, last_name, email, academic_degree, administrative_position, experience_years
         )
 
-    def update_teacher(self, id_teacher: int, first_name: str = None,
-                       last_name: str = None, email: str = None,
-                       academic_degree: str = None, administrative_position: str = None,
-                       experience_years: int = None) -> Optional[Dict[str, Any]]:
+    def update_teacher(
+        self,
+        id_teacher: int,
+        first_name: Optional[str] = None,
+        last_name: Optional[str] = None,
+        email: Optional[str] = None,
+        academic_degree: Optional[str] = None,
+        administrative_position: Optional[str] = None,
+        experience_years: Optional[int] = None,
+    ) -> Optional[Dict[str, Any]]:
         """Обновление данных преподавателя в БД"""
         return self.teacher_rep_db.update_teacher(
-            id_teacher, first_name, last_name, email,
-            academic_degree, administrative_position, experience_years
+            id_teacher,
+            first_name,
+            last_name,
+            email,
+            academic_degree,
+            administrative_position,
+            experience_years,
         )
 
     def delete_teacher(self, id_teacher: int) -> str:
@@ -70,6 +89,6 @@ class TeacherDBAdapter(BaseTeacherRepository):
         """Получение общего количества преподавателей из БД"""
         return self.teacher_rep_db.get_count()
 
-    def clear_table_completely(self):
+    def clear_table_completely(self) -> bool:
         """Очистка таблицы"""
         return self.teacher_rep_db.clear_table_completely()

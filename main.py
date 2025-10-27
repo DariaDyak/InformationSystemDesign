@@ -1,12 +1,21 @@
-from TeacherRepJson import TeacherRepJson
-from TeacherRepYaml import TeacherRepYaml
-from TeacherRepDB import TeacherRepDB
 from DatabaseManager import DatabaseManager
 from TeacherDBAdapter import TeacherDBAdapter
-from TeacherRepDecorator import (TeacherRepDecorator, ExperienceFilter, AcademicDegreeFilter, SurnameFilter, TeacherSorter, CompositeFilter)
+from TeacherRepDB import TeacherRepDB
+from TeacherRepDecorator import (
+    AcademicDegreeFilter,
+    CompositeFilter,
+    ExperienceFilter,
+    SurnameFilter,
+    TeacherRepDecorator,
+    TeacherSorter,
+)
+from TeacherRepJson import TeacherRepJson
+from TeacherRepYaml import TeacherRepYaml
+
 
 def print_separator(title):
     print(f"\n{title}")
+
 
 def display_teachers(teachers, title="Список преподавателей"):
     print(f"\n{title}:")
@@ -15,8 +24,12 @@ def display_teachers(teachers, title="Список преподавателей"
         return
 
     for teacher in teachers:
-        print(f"  ID {teacher['id_teacher']}: {teacher['last_name']} {teacher['first_name']} "
-              f"({teacher['academic_degree']}) - {teacher['email']} - Стаж: {teacher['experience_years']} лет")
+        print(
+            f"  ID {teacher['id_teacher']}: {teacher['last_name']} "
+            f"{teacher['first_name']} ({teacher['academic_degree']}) - "
+            f"{teacher['email']} - Стаж: {teacher['experience_years']} лет"
+        )
+
 
 def display_short_teachers(short_teachers, title="Короткий список преподавателей"):
     print(f"\n{title}:")
@@ -25,8 +38,12 @@ def display_short_teachers(short_teachers, title="Короткий список 
         return
 
     for teacher in short_teachers:
-        print(f"  ID {teacher['id_teacher']}: {teacher['last_name']} {teacher['first_name']} "
-              f"({teacher['academic_degree']}) - {teacher['email']}")
+        print(
+            f"  ID {teacher['id_teacher']}: {teacher['last_name']} "
+            f"{teacher['first_name']} ({teacher['academic_degree']}) - "
+            f"{teacher['email']}"
+        )
+
 
 def demo_interactive_pagination(teacher_manager, format_name):
     """Интерактивный постраничный просмотр"""
@@ -46,21 +63,25 @@ def demo_interactive_pagination(teacher_manager, format_name):
             continue
 
         for i, short_teacher in enumerate(short_list, 1):
-            print(f"  {i}. {short_teacher['last_name']} {short_teacher['first_name']} "
-                  f"({short_teacher['academic_degree']}) - {short_teacher['email']}")
+            print(
+                f"  {i}. {short_teacher['last_name']} {short_teacher['first_name']} "
+                f"({short_teacher['academic_degree']}) - {short_teacher['email']}"
+            )
 
-        print(f"\n  Команды: [n] следующая, [p] предыдущая, [число] перейти на страницу, [q] выход")
+        print(
+            "\n  Команды: [n] следующая, [p] предыдущая, " "[число] перейти на страницу, [q] выход"
+        )
         command = input("  Введите команду: ").strip().lower()
 
-        if command == 'q':
+        if command == "q":
             print("  Выход из постраничного просмотра")
             break
-        elif command == 'n':
+        elif command == "n":
             if current_page < total_pages:
                 current_page += 1
             else:
                 print("  Это последняя страница!")
-        elif command == 'p':
+        elif command == "p":
             if current_page > 1:
                 current_page -= 1
             else:
@@ -74,14 +95,9 @@ def demo_interactive_pagination(teacher_manager, format_name):
         else:
             print("  Неизвестная команда")
 
-    # def demo_json_format():
-    # """Демонстрация работы с JSON форматом"""
 
 def demo_format(teacher_manager, format_name):
     """Общая демонстрация для любого формата"""
-    # print_separator("ДЕМОНСТРАЦИЯ РАБОТЫ С JSON ФАЙЛОМ")
-    # teacher_manager = TeacherRepJson("teachers.json")
-
     # 1. Получение количества элементов (метод i)
     print_separator("1. Получение количества элементов (get_count)")
     count = teacher_manager.get_count()
@@ -90,7 +106,7 @@ def demo_format(teacher_manager, format_name):
     # 2. Чтение всех значений (метод a) - с сортировкой по ID
     print_separator("2. Чтение всех значений (read_all)")
     all_teachers = teacher_manager.read_all()
-    all_teachers_sorted = sorted(all_teachers, key=lambda x: x['id_teacher'])
+    all_teachers_sorted = sorted(all_teachers, key=lambda x: x["id_teacher"])
     display_teachers(all_teachers_sorted, "Все преподаватели")
 
     # 3. Добавление новых преподавателей (метод f)
@@ -99,7 +115,7 @@ def demo_format(teacher_manager, format_name):
         ("Галина", "Борисова", "borisova@university.edu", "Доктор наук", "Декан", 26),
         ("Виталий", "Киселев", "kiselev@university.edu", "Доктор наук", "Профессор", 20),
         ("Лариса", "Михайлова", "mikhailova@university.edu", "Кандидат наук", "Доцент", 12),
-        ("Никита", "Титов", "titov@university.edu", "Кандидат наук", "Ассистент", 3)
+        ("Никита", "Титов", "titov@university.edu", "Кандидат наук", "Ассистент", 3),
     ]
 
     print("  Добавление новых преподавателей:")
@@ -124,19 +140,18 @@ def demo_format(teacher_manager, format_name):
     else:
         print(f"  Преподаватель с ID {test_id} не найден")
 
-    # 5. Получение короткого списка (метод d) + сразу интерактивная пагинация
+    # 5. Получение короткого списка (метод d)
     print_separator("5. Получение короткого списка (get_k_n_short_list)")
     k = 3
     n = 1
     short_list = teacher_manager.get_k_n_short_list(k, n)
     display_short_teachers(short_list, f"Короткий список (страница {n}, по {k} элементов)")
 
-    # demo_interactive_pagination(teacher_manager, "JSON")
     demo_interactive_pagination(teacher_manager, format_name)
 
     # 6. Сортировка элементов (метод e)
     print_separator("6. Сортировка элементов (sort_by_field)")
-    teacher_manager.sort_by_field('last_name')
+    teacher_manager.sort_by_field("last_name")
     sorted_teachers = teacher_manager.read_all()
     display_teachers(sorted_teachers, "Преподаватели после сортировки по фамилии")
 
@@ -156,7 +171,7 @@ def demo_format(teacher_manager, format_name):
         update_id,
         email="alegr_mar@yandex.ru",
         experience_years=20,
-        administrative_position="Старший преподаватель"
+        administrative_position="Старший преподаватель",
     )
 
     print("  После обновления:")
@@ -175,13 +190,13 @@ def demo_format(teacher_manager, format_name):
     teacher_to_delete = teacher_manager.get_by_id(delete_id)
     if teacher_to_delete:
         print(f"    Удаляем: {teacher_to_delete['last_name']} {teacher_to_delete['first_name']}")
-        result = teacher_manager.delete_teacher(delete_id)
+        teacher_manager.delete_teacher(delete_id)
     else:
         print(f"    Преподаватель с ID {delete_id} не найден")
 
     # 9. Финальный просмотр всех данных
     final_teachers = teacher_manager.read_all()
-    final_teachers_sorted = sorted(final_teachers, key=lambda x: x['id_teacher'])
+    final_teachers_sorted = sorted(final_teachers, key=lambda x: x["id_teacher"])
     display_teachers(final_teachers_sorted, "Финальный список преподавателей")
 
     # 10. Итоговое количество
@@ -190,116 +205,6 @@ def demo_format(teacher_manager, format_name):
 
     return teacher_manager
 
-'''def demo_yaml_format():
-    """Демонстрация работы с YAML форматом"""
-    print_separator("ДЕМОНСТРАЦИЯ РАБОТЫ С YAML ФАЙЛОМ")
-    teacher_manager = TeacherRepYaml("teachers.yaml")
-
-    # 1. Получение количества элементов (метод i)
-    print_separator("1. Получение количества элементов (get_count)")
-    count = teacher_manager.get_count()
-    print(f"  Количество преподавателей в базе: {count}")
-
-    # 2. Чтение всех значений (метод a) - с сортировкой по ID
-    print_separator("2. Чтение всех значений (read_all)")
-    all_teachers = teacher_manager.read_all()
-    all_teachers_sorted = sorted(all_teachers, key=lambda x: x['id_teacher'])
-    display_teachers(all_teachers_sorted, "Все преподаватели")
-
-    # 3. Добавление новых преподавателей (метод f)
-    print_separator("3. Добавление новых преподавателей (add_teacher)")
-    new_teachers = [
-        ("Галина", "Борисова", "borisova@university.edu", "Доктор наук", "Декан", 26),
-        ("Виталий", "Киселев", "kiselev@university.edu", "Доктор наук", "Профессор", 20),
-        ("Лариса", "Михайлова", "mikhailova@university.edu", "Кандидат наук", "Доцент", 12),
-        ("Никита", "Титов", "titov@university.edu", "Кандидат наук", "Ассистент", 3)
-    ]
-
-    print("  Добавление новых преподавателей:")
-    for teacher_data in new_teachers:
-        new_id = teacher_manager.add_teacher(*teacher_data)
-        print(f"  Добавлен преподаватель с ID {new_id}: {teacher_data[1]} {teacher_data[0]}")
-
-    # 4. Получение объекта по ID (метод c)
-    print_separator("4. Получение объекта по ID (get_by_id)")
-    test_id = 2
-    teacher_by_id = teacher_manager.get_by_id(test_id)
-    if teacher_by_id:
-        print(f"  Найден преподаватель с ID {test_id}:")
-        print(f"    {teacher_by_id['last_name']} {teacher_by_id['first_name']}")
-        print(f"    {teacher_by_id['email']}")
-        print(f"    {teacher_by_id['academic_degree']}")
-        print(f"    {teacher_by_id['administrative_position']}")
-        print(f"    Стаж: {teacher_by_id['experience_years']} лет")
-    else:
-        print(f"  Преподаватель с ID {test_id} не найден")
-
-    # 5. Получение короткого списка (метод d) + сразу интерактивная пагинация
-    print_separator("5. Получение короткого списка (get_k_n_short_list)")
-    k = 3
-    n = 1
-    short_list = teacher_manager.get_k_n_short_list(k, n)
-    display_short_teachers(short_list, f"Короткий список (страница {n}, по {k} элементов)")
-
-    demo_interactive_pagination(teacher_manager, "YAML")
-
-    # 6. Сортировка элементов (метод e)
-    print_separator("6. Сортировка элементов (sort_by_field)")
-    print("  Сортировка по фамилии:")
-    teacher_manager.sort_by_field('last_name')
-    sorted_teachers = teacher_manager.read_all()
-    display_teachers(sorted_teachers, "Преподаватели после сортировки по фамилии")
-
-    # 7. Обновление элемента (метод g)
-    print_separator("7. Обновление элемента (update_teacher)")
-    update_id = 2
-    print(f"  Обновление преподавателя с ID {update_id}:")
-    print("  До обновления:")
-    teacher_before = teacher_manager.get_by_id(update_id)
-    if teacher_before:
-        print(f"    {teacher_before['last_name']} {teacher_before['first_name']}")
-        print(f"    {teacher_before['email']}")
-        print(f"    {teacher_before['administrative_position']}")
-        print(f"    Стаж: {teacher_before['experience_years']} лет")
-
-    result = teacher_manager.update_teacher(
-        update_id,
-        email="alegr_mar@yandex.ru",
-        experience_years=20,
-        administrative_position="Старший преподаватель"
-    )
-
-    print("  После обновления:")
-    if result:
-        print(f"    {result['last_name']} {result['first_name']}")
-        print(f"    {result['email']}")
-        print(f"    {result['administrative_position']}")
-        print(f"    Стаж: {result['experience_years']} лет")
-    else:
-        print("  Преподаватель не найден")
-
-    # 8. Удаление элемента (метод h)
-    print_separator("8. Удаление элемента (delete_teacher)")
-    delete_id = 3
-    print(f"  Удаление преподавателя с ID {delete_id}:")
-    teacher_to_delete = teacher_manager.get_by_id(delete_id)
-    if teacher_to_delete:
-        print(f"    Удаляем: {teacher_to_delete['last_name']} {teacher_to_delete['first_name']}")
-        result = teacher_manager.delete_teacher(delete_id)
-    else:
-        print(f"    Преподаватель с ID {delete_id} не найден")
-
-    # 9. Финальный просмотр всех данных
-    print_separator("9. Финальный просмотр всех данных")
-    final_teachers = teacher_manager.read_all()
-    final_teachers_sorted = sorted(final_teachers, key=lambda x: x['id_teacher'])
-    display_teachers(final_teachers_sorted, "Финальный список преподавателей")
-
-    # 10. Итоговое количество
-    final_count = teacher_manager.get_count()
-    print(f"\n  Итоговое количество преподавателей: {final_count}")
-
-    return teacher_manager'''
 
 def demo_database_format():
     """Демонстрация работы с базой данных PostgreSQL"""
@@ -320,27 +225,6 @@ def demo_database_format():
         print(f"Ошибка при работе с базой данных: {e}")
         return None
 
-    '''db_connection = DBConnection(
-        dbname="postgres",
-        user="postgres",
-        password="password",
-        host="localhost",
-        port="5432"
-    )
-
-    if not db_connection.connect():
-        print("Не удалось подключиться к базе данных")
-        return None
-
-    try:
-        teacher_manager = TeacherRepDB(db_connection)
-        return demo_format(teacher_manager, "DATABASE")
-
-    except Exception as e:
-        print(f"Ошибка при работе с базой данных: {e}")
-        return None
-    finally:
-        db_connection.disconnect()'''
 
 def demo_adapter_format():
     """Демонстрация работы с адаптером для базы данных"""
@@ -353,10 +237,11 @@ def demo_adapter_format():
         print(f"Тип адаптера: {type(adapter).__name__}")
 
         from BaseTeacherRepository import BaseTeacherRepository
+
         is_correct_type = isinstance(adapter, BaseTeacherRepository)
         print(f"Адаптер является экземпляром BaseTeacherRepository: {is_correct_type}")
 
-        if hasattr(adapter, 'clear_table_completely'):
+        if hasattr(adapter, "clear_table_completely"):
             print("Адаптер имеет специфические методы БД")
 
         return demo_format(adapter, "ADAPTER")
@@ -365,12 +250,13 @@ def demo_adapter_format():
         print(f"Ошибка при работе с адаптером: {e}")
         return None
 
+
 def demo_adapter_vs_direct():
     """Сравнительная демонстрация адаптера и прямого доступа к БД"""
     print_separator("СРАВНИТЕЛЬНАЯ ДЕМОНСТРАЦИЯ: АДАПТЕР vs ПРЯМОЙ ДОСТУП")
 
     try:
-        # Создаем оба экземпляра'
+        # Создаем оба экземпляра
         direct_db = TeacherRepDB()
         adapter_db = TeacherDBAdapter("dummy_path")
 
@@ -394,6 +280,7 @@ def demo_adapter_vs_direct():
         print(f"Ошибка при сравнительной демонстрации: {e}")
         return None
 
+
 def demo_decorator_functionality():
     """Демонстрация работы декоратора с фильтрами и сортировками"""
     print_separator("ДЕМОНСТРАЦИЯ ПАТТЕРНА ДЕКОРАТОР ДЛЯ БАЗЫ ДАННЫХ")
@@ -412,7 +299,10 @@ def demo_decorator_functionality():
 
         print(f"   Найдено преподавателей: {filtered_count}")
         for teacher in filtered_list:
-            print(f"   - {teacher['last_name']} {teacher['first_name']} ({teacher['experience_years']} лет)")
+            print(
+                f"   - {teacher['last_name']} {teacher['first_name']} "
+                f"({teacher['experience_years']} лет)"
+            )
 
         # 2. Демонстрация фильтрации по ученой степени
         print("\n2. Доктора наук")
@@ -466,7 +356,10 @@ def demo_decorator_functionality():
 
         print(f"   Докторов наук с опытом > 10 лет: {combined_count}")
         for teacher in combined_list:
-            print(f"   - {teacher['last_name']} {teacher['first_name']} ({teacher['experience_years']} лет)")
+            print(
+                f"   - {teacher['last_name']} {teacher['first_name']} "
+                f"({teacher['experience_years']} лет)"
+            )
 
         # 6. Демонстрация разных способов сортировки
         print("\n6. РАЗНЫЕ ВАРИАНТЫ СОРТИРОВКИ")
@@ -475,7 +368,7 @@ def demo_decorator_functionality():
             ("по фамилии (А-Я)", TeacherSorter.by_surname()),
             ("по опыту (по убыванию)", TeacherSorter.by_experience(reverse=True)),
             ("по ученой степени", TeacherSorter.by_academic_degree()),
-            ("по должности", TeacherSorter.by_position())
+            ("по должности", TeacherSorter.by_position()),
         ]
 
         for sort_name, sorter in sort_options:
@@ -498,6 +391,7 @@ def demo_decorator_functionality():
     except Exception as e:
         print(f"Ошибка при демонстрации декораторов: {e}")
         return None
+
 
 def demo_decorator_with_pagination():
     """Демонстрация работы декоратора с пагинацией"""
@@ -526,7 +420,10 @@ def demo_decorator_with_pagination():
             print(f"\nСтраница {page}/{total_pages}:")
             page_data = decorated_repo.get_k_n_short_list(page_size, page)
             for teacher in page_data:
-                print(f"   - {teacher['last_name']} {teacher['first_name']} ({teacher['experience_years']} лет)")
+                print(
+                    f"   - {teacher['last_name']} {teacher['first_name']} "
+                    f"({teacher['experience_years']} лет)"
+                )
         demo_interactive_pagination(decorated_repo, "фильтр: кандидаты наук + опыт > 10 лет")
 
         return decorated_repo
@@ -534,6 +431,7 @@ def demo_decorator_with_pagination():
     except Exception as e:
         print(f"Ошибка при демонстрации пагинации: {e}")
         return None
+
 
 def demo_decorator_with_yaml():
     """Демонстрация работы декоратора с YAML файлом"""
@@ -556,25 +454,28 @@ def demo_decorator_with_yaml():
 
     return decorated_repo
 
+
 def main():
+    """Главная функция демонстрации"""
     # Демонстрация работы с JSON
-    json_manager = demo_format(TeacherRepJson("teachers.json"), "JSON")
+    demo_format(TeacherRepJson("teachers.json"), "JSON")
     # Демонстрация работы с YAML
-    yaml_manager = demo_format(TeacherRepYaml("teachers.yaml"), "YAML")
+    demo_format(TeacherRepYaml("teachers.yaml"), "YAML")
     # Демонстрация работы с базой данных PostgreSQL
-    db_manager = demo_database_format()
+    demo_database_format()
     # Демонстрация работы через адаптер
     managers = {}
     adapter_manager = demo_adapter_format()
-    managers['adapter'] = adapter_manager
+    managers["adapter"] = adapter_manager
     comparison_manager = demo_adapter_vs_direct()
-    managers['comparison'] = comparison_manager
+    managers["comparison"] = comparison_manager
     # Демонстрация функциональности декоратора с бд
-    decorator_demo = demo_decorator_functionality()
+    demo_decorator_functionality()
     # Демонстрация пагинации с декоратором
-    pagination_demo = demo_decorator_with_pagination()
+    demo_decorator_with_pagination()
     # Демонстрация функциональности декоратора с файлами
-    yaml_decorator = demo_decorator_with_yaml()
+    demo_decorator_with_yaml()
+
 
 if __name__ == "__main__":
     main()
