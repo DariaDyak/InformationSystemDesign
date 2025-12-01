@@ -33,7 +33,7 @@ class BaseTeacherRepository(ABC):
     # d. Получить список k по счету n объектов класса
     def get_k_n_short_list(self, k: int, n: int) -> List[Dict[str, Any]]:
         data = self.read_all()
-        start = (n - 1) * k
+        start = (n - 1) * k # k-количество элементов на странице, n - номер страницы
         end = start + k
 
         short_list = []

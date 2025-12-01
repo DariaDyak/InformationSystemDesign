@@ -16,7 +16,7 @@ class TeacherRepJson(BaseTeacherRepository):
     def read_all(self):
         if os.path.exists(self.file_path):
             with open(self.file_path, "r", encoding="utf-8") as f:
-                return json.load(f)
+                return json.load(f) # Преобразует JSON в Python-объект
         return []
 
     def write_all(self, data):

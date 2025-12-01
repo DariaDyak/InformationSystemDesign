@@ -11,6 +11,7 @@ from TeacherRepDecorator import (
 )
 from TeacherRepJson import TeacherRepJson
 from TeacherRepYaml import TeacherRepYaml
+from BaseTeacherRepository import BaseTeacherRepository
 
 
 def print_separator(title):
@@ -118,11 +119,10 @@ def demo_format(teacher_manager, format_name):
         ("Никита", "Титов", "titov@university.edu", "Кандидат наук", "Ассистент", 3),
     ]
 
-    print("  Добавление новых преподавателей:")
     for teacher_data in new_teachers:
         new_id = teacher_manager.add_teacher(*teacher_data)
         if new_id != -1:
-            print(f"Добавлен преподаватель с ID {new_id}: {teacher_data[1]} {teacher_data[0]}")
+            print(f"{new_id}: {teacher_data[1]} {teacher_data[0]}")
         else:
             print(f"Ошибка при добавлении: {teacher_data[1]} {teacher_data[0]}")
 
@@ -151,7 +151,7 @@ def demo_format(teacher_manager, format_name):
 
     # 6. Сортировка элементов (метод e)
     print_separator("6. Сортировка элементов (sort_by_field)")
-    teacher_manager.sort_by_field("last_name")
+    teacher_manager.sort_by_field("first_name")
     sorted_teachers = teacher_manager.read_all()
     display_teachers(sorted_teachers, "Преподаватели после сортировки по фамилии")
 
@@ -169,7 +169,7 @@ def demo_format(teacher_manager, format_name):
 
     result = teacher_manager.update_teacher(
         update_id,
-        email="alegr_mar@yandex.ru",
+        email="kuznetsova@university.edu",
         experience_years=20,
         administrative_position="Старший преподаватель",
     )
@@ -218,7 +218,8 @@ def demo_database_format():
             return None
 
         # Создаем TeacherRepDB который делегирует работу к DatabaseManager
-        teacher_manager = TeacherRepDB()
+        teacher_manager = TeacherRepDB(reset_on_start=False)
+
         return demo_format(teacher_manager, "DATABASE")
 
     except Exception as e:
@@ -235,8 +236,6 @@ def demo_adapter_format():
 
         print("Адаптер успешно создан")
         print(f"Тип адаптера: {type(adapter).__name__}")
-
-        from BaseTeacherRepository import BaseTeacherRepository
 
         is_correct_type = isinstance(adapter, BaseTeacherRepository)
         print(f"Адаптер является экземпляром BaseTeacherRepository: {is_correct_type}")
@@ -440,6 +439,7 @@ def demo_decorator_with_yaml():
     base_yaml_repo = TeacherRepYaml("teachers.yaml")
     decorated_repo = TeacherRepDecorator(base_yaml_repo)
 
+    # 1 по фамилии
     print("Фильтрация по фамилии (начинается на 'С')")
     surname_filter = SurnameFilter("С")
     decorated_repo.add_filter(surname_filter)
@@ -447,10 +447,22 @@ def demo_decorator_with_yaml():
 
     count = decorated_repo.get_count()
     print(f"   Преподавателей с фамилией на 'С': {count}")
+    decorated_repo.clear_filters()
+    decorated_repo.clear_sorter()
+    print()
 
-    teachers = decorated_repo.get_k_n_short_list(10, 1)
+    # 2 по опыту работы
+    print("2. Фильтрация по опыту работы (от 5 до 15 лет)")
+    experience_filter = ExperienceFilter(min_experience=5, max_experience=15)
+    decorated_repo.add_filter(experience_filter)
+    decorated_repo.set_sorter(TeacherSorter.by_experience(reverse=True))
+
+    count = decorated_repo.get_count()
+    print(f"   Преподавателей с опытом 5-15 лет: {count}")
+
+    teachers = decorated_repo.read_all()
     for teacher in teachers:
-        print(f"   - {teacher['last_name']} {teacher['first_name']}")
+        print(f"   - {teacher['last_name']} ({teacher['experience_years']} лет)")
 
     return decorated_repo
 
@@ -458,9 +470,9 @@ def demo_decorator_with_yaml():
 def main():
     """Главная функция демонстрации"""
     # Демонстрация работы с JSON
-    demo_format(TeacherRepJson("teachers.json"), "JSON")
+    #demo_format(TeacherRepJson("teachers.json"), "JSON")
     # Демонстрация работы с YAML
-    demo_format(TeacherRepYaml("teachers.yaml"), "YAML")
+    #demo_format(TeacherRepYaml("teachers.yaml"), "YAML")
     # Демонстрация работы с базой данных PostgreSQL
     demo_database_format()
     # Демонстрация работы через адаптер

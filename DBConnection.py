@@ -53,7 +53,7 @@ class DBConnection:
             with self.connection.cursor() as cursor:
                 cursor.execute(query, params)
                 if query.strip().upper().startswith("SELECT") or "RETURNING" in query.upper():
-                    return cursor.fetchall()
+                    return cursor.fetchall() # извлекает все строки
                 else:
                     self.connection.commit()
                     return cursor.rowcount

@@ -7,18 +7,18 @@ class DatabaseManager:
     с использованием делегации для выполнения запросов
     """
 
-    _instance = None
+    _instance = None  # статическая переменная, хранящая единственный экземпляр класса
 
     def __new__(
-        cls, dbname="postgres", user="postgres", password="password", host="localhost", port="5432"
+            cls, dbname="postgres", user="postgres", password="password", host="localhost", port="5432"
     ):
         if cls._instance is None:
             cls._instance = super(DatabaseManager, cls).__new__(cls)
             cls._instance._initialized = False
-        return cls._instance
+        return cls._instance  # всегда возвращаем один и тот же экземпляр
 
     def __init__(
-        self, dbname="postgres", user="postgres", password="password", host="localhost", port="5432"
+            self, dbname="postgres", user="postgres", password="password", host="localhost", port="5432"
     ):
         if not self._initialized:
             self.connection_params = {
@@ -49,7 +49,7 @@ class DatabaseManager:
 
     def disconnect(self):
         """Закрыть соединение с базой данных"""
-        if self.connection:
+        if self.connected:
             self.connection.close()
             self.is_connected = False
             print("Соединение с базой данных закрыто")
@@ -57,30 +57,79 @@ class DatabaseManager:
     def execute_query(self, query, params=None):
         """Делегирование выполнения запроса к базе данных"""
         if not self.is_connected or self.connection is None:
-            print("Нет подключения к базе данных. Сначала вызовите connect()")
-            return None
+            if not self.connect():
+                print("Нет подключения к базе данных. Не удалось подключиться")
+                return None
 
         try:
             with self.connection.cursor() as cursor:
-                cursor.execute(query, params)
-                if query.strip().upper().startswith("SELECT") or "RETURNING" in query.upper():
-                    return cursor.fetchall()
+                cursor.execute(query, params)  # делегируем выполнение курсору
+
+                query_upper = query.strip().upper()
+                is_select = query_upper.startswith("SELECT")
+                has_returning = "RETURNING" in query_upper
+
+                if is_select or has_returning:
+                    result = cursor.fetchall()
+                    self.connection.commit()
+                    return result
                 else:
                     self.connection.commit()
                     return cursor.rowcount
+
         except Exception as e:
             print(f"Ошибка выполнения запроса: {e}")
             print(f"   Запрос: {query}")
+            print(f"   Параметры: {params}")
             if self.connection:
                 try:
                     self.connection.rollback()
-                except:
-                    pass
+                except Exception as rollback_error:
+                    print(f"Ошибка при откате транзакции: {rollback_error}")
             return None
+
+    @property
+    def connected(self):
+        """Проверка активности соединения"""
+        if self.connection and self.is_connected:
+            try:
+                with self.connection.cursor() as cursor:
+                    cursor.execute("SELECT 1")
+                return True
+            except Exception:
+                self.is_connected = False
+                return False
+        return False
+
+    def commit(self):
+        """Явное подтверждение транзакции"""
+        if self.connection and self.is_connected:
+            try:
+                self.connection.commit()
+                return True
+            except Exception as e:
+                print(f"Ошибка при коммите: {e}")
+                return False
+        return False
+
+    def rollback(self):
+        """Откат транзакции"""
+        if self.connection and self.is_connected:
+            try:
+                self.connection.rollback()
+                return True
+            except Exception as e:
+                print(f"Ошибка при откате: {e}")
+                return False
+        return False
 
     def __enter__(self):
         self.connect()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type is not None:
+            self.rollback()
+        else:
+            self.commit()
         self.disconnect()

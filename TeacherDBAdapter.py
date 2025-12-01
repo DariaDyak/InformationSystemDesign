@@ -13,12 +13,12 @@ class TeacherDBAdapter(BaseTeacherRepository):
     def __init__(self, file_path: str = "") -> None:
         # file_path игнорируется для БД, но требуется конструктором базового класса
         super().__init__(file_path)
-        self.teacher_rep_db = TeacherRepDB()
+        self.teacher_rep_db = TeacherRepDB() # экземпляр адаптируемого класса
 
     def _ensure_file_exists(self) -> None:
         """
         Для БД этот метод обеспечивает существование таблицы.
-        В базовом классе это создание файла, здесь - создание таблицы.
+        Здесь - это создание таблицы.
         """
         pass
 
