@@ -234,7 +234,7 @@ class UiController {
 
     openAddWindow() {
         const features = "width=720,height=720";
-        this.addWindow = window.open("add.html", "add-teacher", features);
+        this.addWindow = window.open("form.html?mode=add", "teacher-form-add", features);
         if (this.addWindow && typeof this.addWindow.focus === "function") {
             this.addWindow.focus();
         }
@@ -254,7 +254,7 @@ class UiController {
     openEditWindow(id) {
         if (!id) return;
         const features = "width=760,height=760";
-        this.editWindow = window.open(`edit.html?id=${id}`, `edit-teacher-${id}`, features);
+        this.editWindow = window.open(`form.html?mode=edit&id=${id}`, `edit-teacher-${id}`, features);
         if (this.editWindow && typeof this.editWindow.focus === "function") {
             this.editWindow.focus();
         }
