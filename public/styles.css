@@ -129,6 +129,13 @@ h1 {
     border-radius: 10px;
 }
 
+.filter__field select {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+}
+
 .filter__actions {
     display: flex;
     gap: 8px;

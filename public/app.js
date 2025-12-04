@@ -377,11 +377,13 @@ class FilterForm {
         const surname = document.getElementById("surname-filter").value.trim();
         const minExp = document.getElementById("min-exp-filter").value;
         const maxExp = document.getElementById("max-exp-filter").value;
+        const sort = document.getElementById("sort-filter").value;
         const filters = {};
         if (degree) filters.degree = degree;
         if (surname) filters.surname_prefix = surname;
         if (minExp !== "") filters.min_experience = Number(minExp);
         if (maxExp !== "") filters.max_experience = Number(maxExp);
+        if (sort) filters.sort = sort;
         return filters;
     }
 
