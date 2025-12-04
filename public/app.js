@@ -165,10 +165,13 @@ class TeacherDetailView {
 }
 
 class UiController {
-    constructor(repository, tableView, detailView) {
+    constructor(repository, tableView, detailView, addButton) {
         this.repository = repository;
         this.tableView = tableView;
         this.detailView = detailView;
+        this.addButton = addButton;
+        this.addWindow = null;
+        this.refreshRequested = false;
     }
 
     init() {
@@ -178,6 +181,10 @@ class UiController {
         });
 
         this.tableView.bindRefresh(() => this.repository.loadList());
+
+        if (this.addButton) {
+            this.addButton.addEventListener("click", () => this.openAddWindow());
+        }
 
         this.repository.subscribe("list", (payload) => this.tableView.render(payload));
         this.repository.subscribe("detail", (teacher) => this.detailView.show(teacher));
@@ -189,13 +196,50 @@ class UiController {
             }
         });
 
+        window.addEventListener("message", (event) => {
+            if (!event.data || (event.data.type !== "teacher-added" && event.data.type !== "refresh-main")) {
+                return;
+            }
+            // Обновляем список и страхуемся полной перезагрузкой, если сообщения прилетело при закрытии
+            this.refreshRequested = false;
+            this.repository.loadList();
+            window.location.reload();
+        });
+
+        window.addEventListener("focus", () => {
+            if (this.refreshRequested) {
+                this.refreshRequested = false;
+                this.repository.loadList();
+            }
+        });
+
         this.repository.loadList();
+    }
+
+    openAddWindow() {
+        const features = "width=720,height=720";
+        this.addWindow = window.open("add.html", "add-teacher", features);
+        if (this.addWindow && typeof this.addWindow.focus === "function") {
+            this.addWindow.focus();
+        }
+        // Фолбэк: если окно закрыто без postMessage, всё равно обновим данные
+        const checker = setInterval(() => {
+            if (!this.addWindow || this.addWindow.closed) {
+                clearInterval(checker);
+                this.refreshRequested = false;
+                this.repository.loadList();
+                window.location.reload();
+            }
+        }, 1000);
+        // Если пользователь вернется в главное окно, а форма еще открыта, отметим необходимость обновления
+        this.refreshRequested = true;
     }
 }
 
 const tableBody = document.getElementById("teacher-table-body");
 const statusElement = document.getElementById("table-status");
 const refreshButton = document.getElementById("refresh-btn");
+const addButton = document.getElementById("add-btn");
 const overlayElement = document.getElementById("detail-overlay");
 const detailContent = document.getElementById("detail-content");
 const closeOverlay = document.getElementById("close-overlay");
@@ -211,5 +255,5 @@ const detailView = new TeacherDetailView(
     openTabButton,
     overlayTitle
 );
-const controller = new UiController(repository, tableView, detailView);
+const controller = new UiController(repository, tableView, detailView, addButton);
 controller.init();

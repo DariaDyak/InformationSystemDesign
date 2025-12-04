@@ -6,6 +6,7 @@ from typing import Any, Dict
 from urllib.parse import parse_qs, urlparse
 
 from TeacherController import TeacherController
+from TeacherCreateController import TeacherCreateController
 
 BASE_DIR = Path(__file__).parent
 PUBLIC_DIR = BASE_DIR / "public"
@@ -15,6 +16,7 @@ class TeacherRequestHandler(SimpleHTTPRequestHandler):
     """HTTP обработчик: отдает статику и API на основе контроллера."""
 
     controller = TeacherController()
+    create_controller = TeacherCreateController()
 
     def __init__(self, *args, directory: str | None = None, **kwargs) -> None:
         directory = directory or str(PUBLIC_DIR)
@@ -35,6 +37,15 @@ class TeacherRequestHandler(SimpleHTTPRequestHandler):
             self.path = "/index.html"
 
         super().do_GET()
+
+    def do_POST(self) -> None:
+        parsed = urlparse(self.path)
+
+        if parsed.path == "/api/teachers":
+            self._handle_teacher_create()
+            return
+
+        self.send_error(404, "Not Found")
 
     def _handle_teachers_list(self, parsed) -> None:
         query = parse_qs(parsed.query)
@@ -59,6 +70,16 @@ class TeacherRequestHandler(SimpleHTTPRequestHandler):
 
         self._send_json(teacher)
 
+    def _handle_teacher_create(self) -> None:
+        payload = self._read_json_body()
+        if payload is None:
+            self._send_json({"error": "Некорректный JSON"}, status=400)
+            return
+
+        result = self.create_controller.create_teacher(payload)
+        status = 200 if result.get("success") else 400
+        self._send_json(result, status=status)
+
     def _safe_int(self, value: Any, default: int | None = None) -> int | None:
         try:
             return int(value)
@@ -72,6 +93,16 @@ class TeacherRequestHandler(SimpleHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
+
+    def _read_json_body(self) -> Dict[str, Any] | None:
+        try:
+            content_length = int(self.headers.get("Content-Length", 0))
+            raw_body = self.rfile.read(content_length)
+            if not raw_body:
+                return {}
+            return json.loads(raw_body.decode("utf-8"))
+        except Exception:
+            return None
 
     def log_message(self, format: str, *args) -> None:
         """Тише лог, чтобы не захламлять вывод."""

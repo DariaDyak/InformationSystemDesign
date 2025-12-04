@@ -90,6 +90,13 @@ h1 {
     margin-bottom: 12px;
 }
 
+.actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
 .muted {
     color: var(--muted);
     margin: 6px 0 0 0;
@@ -238,6 +245,48 @@ h1 {
 .detail__value {
     margin: 0;
     font-weight: 700;
+}
+
+.form {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px 14px;
+}
+
+.form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.form__field span {
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.form__field input {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.form__field--full {
+    grid-column: 1 / -1;
+}
+
+.form__actions {
+    display: flex;
+    gap: 10px;
 }
 
 .pill {
