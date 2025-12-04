@@ -32,6 +32,32 @@
                 </div>
             </div>
 
+            <form id="filter-form" class="filter">
+                <div class="filter__row">
+                    <label class="filter__field">
+                        <span>Степень</span>
+                        <input type="text" id="degree-filter" placeholder="Доктор наук / Кандидат наук">
+                    </label>
+                    <label class="filter__field">
+                        <span>Фамилия начинается с</span>
+                        <input type="text" id="surname-filter" placeholder="С">
+                    </label>
+                    <label class="filter__field">
+                        <span>Стаж от (лет)</span>
+                        <input type="number" id="min-exp-filter" min="0" placeholder="0">
+                    </label>
+                    <label class="filter__field">
+                        <span>Стаж до (лет)</span>
+                        <input type="number" id="max-exp-filter" min="0" placeholder="40">
+                    </label>
+                    <div class="filter__actions">
+                        <button type="submit" class="primary-button">Применить</button>
+                        <button type="button" id="reset-filters" class="ghost-button">Сброс</button>
+                    </div>
+                </div>
+                <p class="muted" id="filter-status"></p>
+            </form>
+
             <div class="table-wrapper">
                 <table class="data-table">
                     <thead>

@@ -70,8 +70,15 @@ class TeacherRequestHandler(SimpleHTTPRequestHandler):
         page = self._safe_int(query.get("page", [1])[0], default=1)
         page_size_raw = query.get("page_size", [None])[0]
         page_size = self._safe_int(page_size_raw) if page_size_raw is not None else None
+        filters = self._extract_filters(query)
+        sort_by = query.get("sort", [None])[0]
 
-        payload = self.controller.get_short_teachers(page_size=page_size, page=page)
+        payload = self.controller.get_short_teachers(
+            page_size=page_size,
+            page=page,
+            filters=filters,
+            sort_by=sort_by,
+        )
         self._send_json(payload)
 
     def _handle_teacher_detail(self, parsed) -> None:
@@ -148,6 +155,35 @@ class TeacherRequestHandler(SimpleHTTPRequestHandler):
             return json.loads(raw_body.decode("utf-8"))
         except Exception:
             return None
+
+    def _extract_filters(self, query: Dict[str, list[str]]) -> Dict[str, Any]:
+        filters: Dict[str, Any] = {}
+
+        degree = query.get("degree", [None])[0]
+        if degree:
+            filters["degree"] = degree
+
+        surname_prefix = query.get("surname_prefix", [None])[0]
+        if surname_prefix:
+            filters["surname_prefix"] = surname_prefix
+
+        min_exp_raw = query.get("min_experience", [None])[0]
+        max_exp_raw = query.get("max_experience", [None])[0]
+        try:
+            min_exp = int(min_exp_raw) if min_exp_raw is not None else None
+        except ValueError:
+            min_exp = None
+        try:
+            max_exp = int(max_exp_raw) if max_exp_raw is not None else None
+        except ValueError:
+            max_exp = None
+
+        if min_exp is not None:
+            filters["min_experience"] = min_exp
+        if max_exp is not None:
+            filters["max_experience"] = max_exp
+
+        return filters
 
     def log_message(self, format: str, *args) -> None:
         """Тише лог, чтобы не захламлять вывод."""

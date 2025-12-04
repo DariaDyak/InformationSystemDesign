@@ -97,6 +97,44 @@ h1 {
     justify-content: flex-end;
 }
 
+.filter {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
+    background: #f9fafb;
+}
+
+.filter__row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    align-items: end;
+}
+
+.filter__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.filter__field span {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.filter__field input {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.filter__actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
 .muted {
     color: var(--muted);
     margin: 6px 0 0 0;

@@ -2,6 +2,7 @@ class TeacherRepositoryClient {
     constructor(baseUrl = "/api") {
         this.baseUrl = baseUrl;
         this.subscribers = { list: [], detail: [], deleted: [], error: [] };
+        this.currentFilters = {};
     }
 
     subscribe(event, handler) {
@@ -15,9 +16,20 @@ class TeacherRepositoryClient {
         (this.subscribers[event] || []).forEach((handler) => handler(payload));
     }
 
-    async loadList(page = 1) {
+    async loadList(page = 1, filters = null) {
         try {
-            const response = await fetch(`${this.baseUrl}/teachers?page=${page}`);
+            if (filters) {
+                this.currentFilters = filters;
+            }
+            const params = new URLSearchParams({ page });
+            if (this.currentFilters) {
+                Object.entries(this.currentFilters).forEach(([key, value]) => {
+                    if (value !== undefined && value !== null && value !== "") {
+                        params.append(key, value);
+                    }
+                });
+            }
+            const response = await fetch(`${this.baseUrl}/teachers?${params.toString()}`);
             if (!response.ok) {
                 const payload = await response.json().catch(() => ({}));
                 throw new Error(payload.error || "Не удалось загрузить список преподавателей");
@@ -205,6 +217,7 @@ class UiController {
         this.addButton = addButton;
         this.addWindow = null;
         this.refreshRequested = false;
+        this.filterForm = null;
     }
 
     init() {
@@ -308,12 +321,83 @@ class UiController {
         }, 1000);
         this.refreshRequested = true;
     }
+
+    attachFilterForm(filterForm) {
+        this.filterForm = filterForm;
+        if (!filterForm) return;
+
+        filterForm.onApply = (filters) => {
+            this.repository.loadList(1, filters);
+            const status = this.buildFilterStatus(filters);
+            filterForm.setStatus(status);
+        };
+        filterForm.onReset = () => {
+            this.repository.loadList(1, {});
+            filterForm.setStatus("Фильтры сброшены");
+        };
+    }
+
+    buildFilterStatus(filters) {
+        const active = Object.entries(filters || {}).filter(
+            ([, value]) => value !== null && value !== undefined && value !== ""
+        );
+        if (!active.length) {
+            return "Фильтры не применены";
+        }
+        return `Применены фильтры: ${active
+            .map(([k, v]) => `${k}=${v}`)
+            .join(", ")}`;
+    }
+}
+
+class FilterForm {
+    constructor(formElement, statusElement) {
+        this.formElement = formElement;
+        this.statusElement = statusElement;
+        this.onApply = null;
+        this.onReset = null;
+
+        this.formElement.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const filters = this.getFilters();
+            if (this.onApply) this.onApply(filters);
+        });
+
+        const resetBtn = document.getElementById("reset-filters");
+        if (resetBtn) {
+            resetBtn.addEventListener("click", () => {
+                this.formElement.reset();
+                if (this.onReset) this.onReset();
+            });
+        }
+    }
+
+    getFilters() {
+        const degree = document.getElementById("degree-filter").value.trim();
+        const surname = document.getElementById("surname-filter").value.trim();
+        const minExp = document.getElementById("min-exp-filter").value;
+        const maxExp = document.getElementById("max-exp-filter").value;
+        const filters = {};
+        if (degree) filters.degree = degree;
+        if (surname) filters.surname_prefix = surname;
+        if (minExp !== "") filters.min_experience = Number(minExp);
+        if (maxExp !== "") filters.max_experience = Number(maxExp);
+        return filters;
+    }
+
+    setStatus(message) {
+        if (this.statusElement) {
+            this.statusElement.textContent = message;
+        }
+    }
 }
 
 const tableBody = document.getElementById("teacher-table-body");
 const statusElement = document.getElementById("table-status");
 const refreshButton = document.getElementById("refresh-btn");
 const addButton = document.getElementById("add-btn");
+const filterFormElement = document.getElementById("filter-form");
+const filterStatus = document.getElementById("filter-status");
 const overlayElement = document.getElementById("detail-overlay");
 const detailContent = document.getElementById("detail-content");
 const closeOverlay = document.getElementById("close-overlay");
@@ -334,4 +418,6 @@ const detailView = new TeacherDetailView(
     overlayTitle
 );
 const controller = new UiController(repository, tableView, detailView, addButton);
+const filterForm = new FilterForm(filterFormElement, filterStatus);
+controller.attachFilterForm(filterForm);
 controller.init();
