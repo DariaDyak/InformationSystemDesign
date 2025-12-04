@@ -101,13 +101,15 @@ class TeacherTableView {
 }
 
 class TeacherDetailView {
-    constructor(overlayElement, contentElement, closeButton, openTabButton, titleElement) {
+    constructor(overlayElement, contentElement, closeButton, openTabButton, editButton, titleElement) {
         this.overlayElement = overlayElement;
         this.contentElement = contentElement;
         this.closeButton = closeButton;
         this.openTabButton = openTabButton;
+        this.editButton = editButton;
         this.titleElement = titleElement;
         this.currentId = null;
+        this.onEdit = () => {};
 
         this.closeButton.addEventListener("click", () => this.hide());
         this.overlayElement.addEventListener("click", (event) => {
@@ -120,6 +122,13 @@ class TeacherDetailView {
                 window.open(`detail.html?id=${this.currentId}`, "_blank");
             }
         });
+        if (this.editButton) {
+            this.editButton.addEventListener("click", () => {
+                if (this.currentId) {
+                    this.onEdit(this.currentId);
+                }
+            });
+        }
     }
 
     showLoading(id) {
@@ -186,6 +195,8 @@ class UiController {
             this.addButton.addEventListener("click", () => this.openAddWindow());
         }
 
+        this.detailView.onEdit = (id) => this.openEditWindow(id);
+
         this.repository.subscribe("list", (payload) => this.tableView.render(payload));
         this.repository.subscribe("detail", (teacher) => this.detailView.show(teacher));
         this.repository.subscribe("error", ({ message, scope }) => {
@@ -197,7 +208,12 @@ class UiController {
         });
 
         window.addEventListener("message", (event) => {
-            if (!event.data || (event.data.type !== "teacher-added" && event.data.type !== "refresh-main")) {
+            if (
+                !event.data ||
+                (event.data.type !== "teacher-added" &&
+                    event.data.type !== "refresh-main" &&
+                    event.data.type !== "teacher-updated")
+            ) {
                 return;
             }
             // Обновляем список и страхуемся полной перезагрузкой, если сообщения прилетело при закрытии
@@ -234,6 +250,25 @@ class UiController {
         // Если пользователь вернется в главное окно, а форма еще открыта, отметим необходимость обновления
         this.refreshRequested = true;
     }
+
+    openEditWindow(id) {
+        if (!id) return;
+        const features = "width=760,height=760";
+        this.editWindow = window.open(`edit.html?id=${id}`, `edit-teacher-${id}`, features);
+        if (this.editWindow && typeof this.editWindow.focus === "function") {
+            this.editWindow.focus();
+        }
+
+        const checker = setInterval(() => {
+            if (!this.editWindow || this.editWindow.closed) {
+                clearInterval(checker);
+                this.refreshRequested = false;
+                this.repository.loadList();
+                window.location.reload();
+            }
+        }, 1000);
+        this.refreshRequested = true;
+    }
 }
 
 const tableBody = document.getElementById("teacher-table-body");
@@ -244,6 +279,7 @@ const overlayElement = document.getElementById("detail-overlay");
 const detailContent = document.getElementById("detail-content");
 const closeOverlay = document.getElementById("close-overlay");
 const openTabButton = document.getElementById("open-tab-btn");
+const editButton = document.getElementById("edit-btn");
 const overlayTitle = document.getElementById("overlay-title");
 
 const repository = new TeacherRepositoryClient("/api");
@@ -253,6 +289,7 @@ const detailView = new TeacherDetailView(
     detailContent,
     closeOverlay,
     openTabButton,
+    editButton,
     overlayTitle
 );
 const controller = new UiController(repository, tableView, detailView, addButton);

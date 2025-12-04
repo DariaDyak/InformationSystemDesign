@@ -6,11 +6,11 @@ import psycopg2
 class DBConnection:
     def __init__(
         self,
-        dbname: str = "postgres",
+        dbname: str = "dasha",
         user: str = "postgres",
-        password: str = "password",
+        password: str = "123",
         host: str = "localhost",
-        port: str = "5432",
+        port: str = "5433",
     ) -> None:
         self.connection_params = {
             "dbname": dbname,

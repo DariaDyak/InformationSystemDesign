@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактировать преподавателя</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="panel" style="max-width: 820px; margin: 32px auto;">
+        <p class="eyebrow">Редактирование записи</p>
+        <h1 id="title">Загрузка...</h1>
+        <p id="status" class="muted">Получаем данные</p>
+
+        <form id="edit-form" class="form hidden">
+            <div class="form__grid">
+                <label class="form__field">
+                    <span>Имя</span>
+                    <input type="text" name="first_name" required>
+                </label>
+                <label class="form__field">
+                    <span>Фамилия</span>
+                    <input type="text" name="last_name" required>
+                </label>
+                <label class="form__field form__field--full">
+                    <span>Email</span>
+                    <input type="email" name="email" required>
+                </label>
+                <label class="form__field">
+                    <span>Учёная степень</span>
+                    <input type="text" name="academic_degree" required>
+                </label>
+                <label class="form__field">
+                    <span>Должность</span>
+                    <input type="text" name="administrative_position" required>
+                </label>
+                <label class="form__field">
+                    <span>Стаж (лет)</span>
+                    <input type="number" name="experience_years" min="0" required>
+                </label>
+            </div>
+
+            <div class="form__actions">
+                <button type="submit" class="primary-button">Сохранить изменения</button>
+                <button type="button" id="cancel-btn" class="ghost-button">Отмена</button>
+            </div>
+        </form>
+    </main>
+
+    <script type="module" src="edit.js"></script>
+</body>
+</html>

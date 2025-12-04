@@ -7,6 +7,7 @@ from urllib.parse import parse_qs, urlparse
 
 from TeacherController import TeacherController
 from TeacherCreateController import TeacherCreateController
+from TeacherUpdateController import TeacherUpdateController
 
 BASE_DIR = Path(__file__).parent
 PUBLIC_DIR = BASE_DIR / "public"
@@ -17,6 +18,7 @@ class TeacherRequestHandler(SimpleHTTPRequestHandler):
 
     controller = TeacherController()
     create_controller = TeacherCreateController()
+    update_controller = TeacherUpdateController()
 
     def __init__(self, *args, directory: str | None = None, **kwargs) -> None:
         directory = directory or str(PUBLIC_DIR)
@@ -45,6 +47,13 @@ class TeacherRequestHandler(SimpleHTTPRequestHandler):
             self._handle_teacher_create()
             return
 
+        self.send_error(404, "Not Found")
+
+    def do_PUT(self) -> None:
+        parsed = urlparse(self.path)
+        if parsed.path.startswith("/api/teachers/"):
+            self._handle_teacher_update(parsed)
+            return
         self.send_error(404, "Not Found")
 
     def _handle_teachers_list(self, parsed) -> None:
@@ -77,6 +86,22 @@ class TeacherRequestHandler(SimpleHTTPRequestHandler):
             return
 
         result = self.create_controller.create_teacher(payload)
+        status = 200 if result.get("success") else 400
+        self._send_json(result, status=status)
+
+    def _handle_teacher_update(self, parsed) -> None:
+        try:
+            teacher_id = int(parsed.path.rstrip("/").split("/")[-1])
+        except ValueError:
+            self._send_json({"error": "Некорректный идентификатор"}, status=400)
+            return
+
+        payload = self._read_json_body()
+        if payload is None:
+            self._send_json({"error": "Некорректный JSON"}, status=400)
+            return
+
+        result = self.update_controller.update_teacher(teacher_id, payload)
         status = 200 if result.get("success") else 400
         self._send_json(result, status=status)
 
