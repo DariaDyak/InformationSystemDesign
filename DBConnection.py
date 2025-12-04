@@ -6,9 +6,9 @@ import psycopg2
 class DBConnection:
     def __init__(
         self,
-        dbname: str = "dasha",
+        dbname: str = "postgres",
         user: str = "postgres",
-        password: str = "123",
+        password: str = "password",
         host: str = "localhost",
         port: str = "5433",
     ) -> None:

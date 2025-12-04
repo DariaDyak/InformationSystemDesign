@@ -22,7 +22,7 @@ class TeacherRequestHandler(SimpleHTTPRequestHandler):
     update_controller = TeacherUpdateController()
     delete_controller = TeacherDeleteController()
 
-    def __init__(self, *args, directory: str | None = None, **kwargs) -> None:
+    def __init__(self, *args, directory: str = None, **kwargs) -> None:
         directory = directory or str(PUBLIC_DIR)
         super().__init__(*args, directory=directory, **kwargs)
 
@@ -132,7 +132,7 @@ class TeacherRequestHandler(SimpleHTTPRequestHandler):
         status = 200 if result.get("success") else 400
         self._send_json(result, status=status)
 
-    def _safe_int(self, value: Any, default: int | None = None) -> int | None:
+    def _safe_int(self, value: Any, default: int  = None) -> int:
         try:
             return int(value)
         except (TypeError, ValueError):
@@ -146,7 +146,7 @@ class TeacherRequestHandler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
-    def _read_json_body(self) -> Dict[str, Any] | None:
+    def _read_json_body(self) -> Dict[str, Any]:
         try:
             content_length = int(self.headers.get("Content-Length", 0))
             raw_body = self.rfile.read(content_length)

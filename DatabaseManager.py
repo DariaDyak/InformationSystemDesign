@@ -10,7 +10,7 @@ class DatabaseManager:
     _instance = None  # статическая переменная, хранящая единственный экземпляр класса
 
     def __new__(
-            cls, dbname="dasha", user="postgres", password="123", host="localhost", port="5433"
+            cls, dbname="postgres", user="postgres", password="password", host="localhost", port="5433"
     ):
         if cls._instance is None:
             cls._instance = super(DatabaseManager, cls).__new__(cls)
@@ -18,7 +18,7 @@ class DatabaseManager:
         return cls._instance  # всегда возвращаем один и тот же экземпляр
 
     def __init__(
-            self, dbname="dasha", user="postgres", password="123", host="localhost", port="5433"
+            self, dbname="postgres", user="postgres", password="password", host="localhost", port="5433"
     ):
         if not self._initialized:
             self.connection_params = {
