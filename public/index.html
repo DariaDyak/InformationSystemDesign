@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Преподаватели — просмотр (READ)</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div>
+            <p class="eyebrow">MVC · Observer · Read Only</p>
+            <h1>Список преподавателей</h1>
+            <p class="lede">
+                Главная таблица показывает краткие сведения. Клик по строке открывает окно с полной карточкой
+                (можно вынести в новую вкладку).
+            </p>
+        </div>
+        <div class="badge">Источник: БД (PostgreSQL)</div>
+    </header>
+
+    <main class="layout">
+        <section class="panel">
+            <div class="panel__header">
+                <div>
+                    <h2>Краткая информация</h2>
+                    <p class="muted" id="table-status">Готовим данные…</p>
+                </div>
+                <button id="refresh-btn" class="ghost-button">Обновить</button>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Фамилия</th>
+                            <th>Инициалы</th>
+                            <th>Степень</th>
+                            <th>Должность</th>
+                            <th>Email</th>
+                            <th>Стаж</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teacher-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="panel panel--narrow">
+            <h3>Что уже сделано</h3>
+            <ul class="checklist">
+                <li>Без фреймворка: чистый Python HTTP + статика.</li>
+                <li>MVC: репозиторий → контроллер → представление.</li>
+                <li>READ сценарий с паттерном наблюдатель во фронтенде.</li>
+                <li>Детальная карточка в отдельном окне/вкладке.</li>
+            </ul>
+        </section>
+    </main>
+
+    <div id="detail-overlay" class="overlay hidden">
+        <div class="overlay__card" role="dialog" aria-modal="true">
+            <div class="overlay__header">
+                <h2 id="overlay-title">Карточка преподавателя</h2>
+                <button id="close-overlay" class="ghost-button" aria-label="Закрыть">Закрыть</button>
+            </div>
+            <div id="detail-content" class="detail"></div>
+            <div class="overlay__actions">
+                <button id="open-tab-btn" class="primary-button">Открыть в новой вкладке</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
