@@ -1,7 +1,7 @@
 class TeacherRepositoryClient {
     constructor(baseUrl = "/api") {
         this.baseUrl = baseUrl;
-        this.subscribers = { list: [], detail: [], error: [] };
+        this.subscribers = { list: [], detail: [], deleted: [], error: [] };
     }
 
     subscribe(event, handler) {
@@ -40,6 +40,21 @@ class TeacherRepositoryClient {
             this._notify("detail", data);
         } catch (err) {
             this._notify("error", { message: err.message, scope: "detail" });
+        }
+    }
+
+    async deleteTeacher(id) {
+        try {
+            const response = await fetch(`${this.baseUrl}/teachers/${id}`, {
+                method: "DELETE",
+            });
+            const data = await response.json();
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || "Не удалось удалить");
+            }
+            this._notify("deleted", { id });
+        } catch (err) {
+            this._notify("error", { message: err.message, scope: "delete" });
         }
     }
 }
@@ -101,15 +116,17 @@ class TeacherTableView {
 }
 
 class TeacherDetailView {
-    constructor(overlayElement, contentElement, closeButton, openTabButton, editButton, titleElement) {
+    constructor(overlayElement, contentElement, closeButton, openTabButton, editButton, deleteButton, titleElement) {
         this.overlayElement = overlayElement;
         this.contentElement = contentElement;
         this.closeButton = closeButton;
         this.openTabButton = openTabButton;
         this.editButton = editButton;
+        this.deleteButton = deleteButton;
         this.titleElement = titleElement;
         this.currentId = null;
         this.onEdit = () => {};
+        this.onDelete = () => {};
 
         this.closeButton.addEventListener("click", () => this.hide());
         this.overlayElement.addEventListener("click", (event) => {
@@ -126,6 +143,13 @@ class TeacherDetailView {
             this.editButton.addEventListener("click", () => {
                 if (this.currentId) {
                     this.onEdit(this.currentId);
+                }
+            });
+        }
+        if (this.deleteButton) {
+            this.deleteButton.addEventListener("click", () => {
+                if (this.currentId) {
+                    this.onDelete(this.currentId);
                 }
             });
         }
@@ -196,12 +220,20 @@ class UiController {
         }
 
         this.detailView.onEdit = (id) => this.openEditWindow(id);
+        this.detailView.onDelete = (id) => this.deleteTeacher(id);
 
         this.repository.subscribe("list", (payload) => this.tableView.render(payload));
         this.repository.subscribe("detail", (teacher) => this.detailView.show(teacher));
+        this.repository.subscribe("deleted", () => {
+            this.detailView.hide();
+            this.repository.loadList();
+            window.location.reload();
+        });
         this.repository.subscribe("error", ({ message, scope }) => {
             if (scope === "list") {
                 this.tableView.showStatus(message);
+            } else if (scope === "delete") {
+                this.detailView.showError(message);
             } else {
                 this.detailView.showError(message);
             }
@@ -230,6 +262,13 @@ class UiController {
         });
 
         this.repository.loadList();
+    }
+
+    deleteTeacher(id) {
+        if (!id) return;
+        const confirmed = window.confirm("Удалить преподавателя?");
+        if (!confirmed) return;
+        this.repository.deleteTeacher(id);
     }
 
     openAddWindow() {
@@ -280,6 +319,7 @@ const detailContent = document.getElementById("detail-content");
 const closeOverlay = document.getElementById("close-overlay");
 const openTabButton = document.getElementById("open-tab-btn");
 const editButton = document.getElementById("edit-btn");
+const deleteButton = document.getElementById("delete-btn");
 const overlayTitle = document.getElementById("overlay-title");
 
 const repository = new TeacherRepositoryClient("/api");
@@ -290,6 +330,7 @@ const detailView = new TeacherDetailView(
     closeOverlay,
     openTabButton,
     editButton,
+    deleteButton,
     overlayTitle
 );
 const controller = new UiController(repository, tableView, detailView, addButton);
